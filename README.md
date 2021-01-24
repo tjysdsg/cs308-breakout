@@ -2,7 +2,7 @@
 
 This project implements the game of Breakout.
 
-Name: 
+Name: Jiyang Tang
 
 ### Timeline
 

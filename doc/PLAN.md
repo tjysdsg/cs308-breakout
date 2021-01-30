@@ -102,7 +102,7 @@ The pseudocode of classes I plan to implement is the following:
 
 ```java
 class Ball {
-    Point2D v; // velocity
+    Vec2D v; // velocity
 
     void step(double time); // called by main game loop, calculate and update position according to velocity of itself
 }
@@ -141,7 +141,7 @@ class Block {
 ```java
 class Paddle {
     Vec2D pos;
-    int width;
+    double width;
     double maxVelocity;
 
     void translate(int dir /* -1 left, 1 right */); // take wrapping into account
@@ -158,7 +158,7 @@ import java.util.ArrayList;
 
 class World {
     boolean poweredUp;
-    int score;
+    int lives;
     int screenWidth;
     int screenHeight;
     ArrayList<Block> blocks;
@@ -188,3 +188,8 @@ class InputManager {
     void step(double time);
 }
 ```
+
+# Code Guidelines
+
+Google Java
+style: [https://google.github.io/styleguide/javaguide.html](https://google.github.io/styleguide/javaguide.html)

@@ -20,6 +20,14 @@ public class Vec2D {
         return y;
     }
 
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
     public Vec2D add(Vec2D v) {
         this.x += v.x;
         this.y += v.y;

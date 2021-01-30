@@ -56,12 +56,12 @@ public class KeyboardInputManager implements EventHandler<KeyEvent> {
         else if (type.equals(KeyEvent.KEY_RELEASED)) {
             // horizontal axis
             if (code == KeyCode.RIGHT || code == KeyCode.LEFT) {
-                hAxis = 0;
+                setHAxis(0);
             }
 
             // vertical axis
             if (code == KeyCode.UP || code == KeyCode.DOWN) {
-                vAxis = 0;
+                setVAxis(0);
             }
         }
     }

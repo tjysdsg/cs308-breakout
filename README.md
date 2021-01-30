@@ -6,33 +6,40 @@ Name: Jiyang Tang
 
 ### Timeline
 
-Start Date: 
+Start Date: 01/30/2021
 
-Finish Date: 
+Finish Date:
 
-Hours Spent:
+Hours Spent: 6 + ? + ? = ?
 
 ### Resources Used
 
-
 ### Running the Program
 
-Main class:
+Main class: [src/breakout/Main.java](src/breakout/Main.java)
 
-Data files needed: 
+Data files needed:
+
+- [ball.gif](data/ball.gif)
+- [paddle.gif](data/paddle.gif)
 
 Key/Mouse inputs:
 
-Cheat keys:
+- Direction keys to control the paddle
 
+Cheat keys:
 
 ### Notes/Assumptions
 
 Assumptions or Simplifications:
 
+- Assuming running on PC, no touchscreen support
+
 Known Bugs:
 
 Extra credit:
 
+- [stackexchange.com](https://gamedev.stackexchange.com/questions/96337/collision-between-aabb-and-circle) about
+  collision detection (though not using the methods mentioned there, my implementation was inspired by them)
 
 ### Impressions

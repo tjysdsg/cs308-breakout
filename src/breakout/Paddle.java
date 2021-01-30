@@ -1,18 +1,16 @@
 package breakout;
 
-import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.util.Objects;
 
-public class Paddle {
-    private Vec2D pos;
+public class Paddle extends GameObject {
     private double width = 80; // TODO: stretch image to fit width
     private double velocity = 200; // TODO: calculate real velocity (in pixels) according to screen width
     private int dir = 0;
-    private ImageView sceneNode;
-    public static final String IMAGE = "paddle.gif";
+    private static final String IMAGE = "paddle.gif";
+    // TODO: collider
 
     public Paddle(double x, double y) {
         Image image = new Image(Objects.requireNonNull(
@@ -27,8 +25,9 @@ public class Paddle {
         this.dir = dir;
     }
 
+    @Override
     public void step(double time) {
-        pos.add(new Vec2D(dir * velocity * time, 0));
+        pos = pos.add(new Vec2D(dir * velocity * time, 0));
         warp();
 
         sceneNode.setX(pos.getX());
@@ -47,9 +46,5 @@ public class Paddle {
         if (offset > 0) {
             pos.setX(maxX - offset);
         }
-    }
-
-    public Node getSceneNode() {
-        return sceneNode;
     }
 }

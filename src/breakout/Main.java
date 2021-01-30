@@ -36,7 +36,6 @@ public class Main extends Application {
         animation.play();
     }
 
-
     private void step(double time) {
         level.step(time);
         // Shape intersection = Shape.intersect(mover, grower);

@@ -22,10 +22,8 @@ import javafx.util.Duration;
  */
 public class Main extends Application {
     public static final String TITLE = "Breakout";
-    public static final int SIZE = 400;
     public static final int FRAMES_PER_SECOND = 60;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-    public static final Paint BACKGROUND = Color.AZURE;
     public static final String BOUNCER_IMAGE = "ball.gif";
     public static final int BOUNCER_SPEED = 30;
     public static final Paint MOVER_COLOR = Color.PLUM;
@@ -38,16 +36,15 @@ public class Main extends Application {
     private Rectangle mover;
     private KeyboardInputManager inputManager;
 
-
     /**
      * Initialize what will be displayed and how it will be updated.
      */
     @Override
     public void start(Stage stage) {
-        inputManager = new KeyboardInputManager();
+        inputManager = KeyboardInputManager.globalInputManager();
 
         // attach scene to the stage and display it
-        scene = setupGame(SIZE, SIZE, BACKGROUND);
+        scene = setupGame(600, 800, Color.AZURE);
         stage.setScene(scene);
         stage.setTitle(TITLE);
         stage.show();
@@ -62,6 +59,7 @@ public class Main extends Application {
     // Create the game's "scene": what shapes will be in the game and their starting properties
     private Scene setupGame(int width, int height, Paint background) {
         // register input manager
+        // TODO: detect touch screen and use a different input manager
         scene.addEventHandler(KeyEvent.ANY, inputManager);
 
         // create one top level collection to organize the things in the scene
@@ -87,8 +85,6 @@ public class Main extends Application {
         return scene;
     }
 
-    // Change properties of shapes in small ways to animate them over time
-    // Note, there are more sophisticated ways to animate shapes, but these simple ways work fine to start
     private void step(double elapsedTime) {
         // update "actors" attributes
         bouncer.setX(bouncer.getX() + BOUNCER_SPEED * elapsedTime);

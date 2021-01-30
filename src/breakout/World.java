@@ -18,6 +18,9 @@ public class World {
     private Ball ball;
     private Paddle paddle;
 
+    public World() {
+    }
+
     public static World fromLevelFile(String filename) {
         return new World();
     }

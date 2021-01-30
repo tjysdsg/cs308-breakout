@@ -5,9 +5,31 @@ import javafx.event.EventType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+interface AxisHandler {
+    void handle(double val);
+}
+
+// TODO: base InputManager class, KeyboardInputManager and MouseInputManager inherit from it
 public class KeyboardInputManager implements EventHandler<KeyEvent> {
     private int hAxis = 0;
     private int vAxis = 0;
+    private Map<String, ArrayList<AxisHandler>> axisHandlers;
+    private static KeyboardInputManager globalInputManager;
+
+    public static KeyboardInputManager globalInputManager() {
+        if (globalInputManager == null) {
+            globalInputManager = new KeyboardInputManager();
+        }
+        return globalInputManager;
+    }
+
+    public KeyboardInputManager() {
+        axisHandlers = new HashMap<>();
+    }
 
     @Override
     public void handle(KeyEvent event) {
@@ -18,16 +40,16 @@ public class KeyboardInputManager implements EventHandler<KeyEvent> {
         if (type.equals(KeyEvent.KEY_PRESSED)) {
             // horizontal axis
             if (code == KeyCode.RIGHT) {
-                hAxis = 1;
+                setHAxis(1);
             } else if (code == KeyCode.LEFT) {
-                hAxis = -1;
+                setHAxis(-1);
             }
 
             // vertical axis
             if (code == KeyCode.UP) {
-                vAxis = 1;
+                setVAxis(1);
             } else if (code == KeyCode.DOWN) {
-                vAxis = -1;
+                setVAxis(-1);
             }
         }
         // key release
@@ -44,18 +66,31 @@ public class KeyboardInputManager implements EventHandler<KeyEvent> {
         }
     }
 
-    /**
-     * Get input axis value, like Unity `Input.GetAxis()`
-     *
-     * @param name
-     * @return
-     */
-    public int getIntAxis(String name) {
-        if (name.equals("Horizontal")) {
-            return hAxis;
-        } else if (name.equals("Vertical")) {
-            return vAxis;
+    public void setHAxis(int val) {
+        hAxis = val;
+        triggerHandler("Horizontal", hAxis);
+    }
+
+    public void setVAxis(int val) {
+        vAxis = val;
+        triggerHandler("Vertical", vAxis);
+    }
+
+    public void registerInputHandler(String axis, AxisHandler handler) {
+        // FIXME: two queries
+        if (axisHandlers.containsKey(axis)) {
+            axisHandlers.get(axis).add(handler);
+        } else {
+            var handlers = new ArrayList<AxisHandler>();
+            handlers.add(handler);
+            axisHandlers.put(axis, handlers);
         }
-        return 0;
+    }
+
+    private void triggerHandler(String axis, double val) {
+        var handlers = axisHandlers.get(axis);
+        for (AxisHandler h : handlers) {
+            h.handle(val);
+        }
     }
 }

@@ -5,6 +5,9 @@ import javafx.scene.image.ImageView;
 
 import java.util.Objects;
 
+/**
+ * NOTE: pos is the center of the ball, while the coordinate of ImageView is the top left corner of the image
+ */
 public class Ball extends GameObject {
     private double radius = 10;
     private Vec2D v; // velocity
@@ -33,8 +36,8 @@ public class Ball extends GameObject {
     public void step(double time) {
         pos = pos.add(v.mul(time));
         ((SphereCollider) collider).pos = pos;
-        sceneNode.setX(pos.getX());
-        sceneNode.setY(pos.getY());
+        sceneNode.setX(pos.getX() - radius);
+        sceneNode.setY(pos.getY() - radius);
     }
 
     public Vec2D getVelocity() {

@@ -89,8 +89,10 @@ public class KeyboardInputManager implements EventHandler<KeyEvent> {
 
     private void triggerHandler(String axis, double val) {
         var handlers = axisHandlers.get(axis);
-        for (AxisHandler h : handlers) {
-            h.handle(val);
+        if (handlers != null) {
+            for (AxisHandler h : handlers) {
+                h.handle(val);
+            }
         }
     }
 }

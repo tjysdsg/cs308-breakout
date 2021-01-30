@@ -8,8 +8,7 @@ public class Vec2D {
     }
 
     public Vec2D(double x, double y) {
-        this.x = x;
-        this.y = y;
+        this.set(x, y);
     }
 
     public double getX() {
@@ -25,6 +24,11 @@ public class Vec2D {
     }
 
     public void setY(double y) {
+        this.y = y;
+    }
+
+    public void set(double x, double y) {
+        this.x = x;
         this.y = y;
     }
 

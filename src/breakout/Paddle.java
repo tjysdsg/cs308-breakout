@@ -9,7 +9,7 @@ public class Paddle extends GameObject {
 
   private double width = 80;
   private double height = 10;
-  private double velocity = 200;
+  private double velocity = 250;
   private int dir = 0;
   private static final String IMAGE = "paddle.gif";
 

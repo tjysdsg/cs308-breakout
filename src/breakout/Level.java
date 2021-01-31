@@ -85,11 +85,11 @@ public class Level {
                 new Vec2D(-100, -100),
                 new Vec2D(Main.SCREEN_WIDTH + 100, 0))
         );
-        blocks.add(new Block(                                              // bottom
-                Block.BlockType.INDESTRUCTIBLE,
-                new Vec2D(-100, Main.SCREEN_HEIGHT),
-                new Vec2D(Main.SCREEN_WIDTH + 100, Main.SCREEN_HEIGHT + 100))
-        );
+        // blocks.add(new Block(                                              // bottom
+        //         Block.BlockType.INDESTRUCTIBLE,
+        //         new Vec2D(-100, Main.SCREEN_HEIGHT),
+        //         new Vec2D(Main.SCREEN_WIDTH + 100, Main.SCREEN_HEIGHT + 100))
+        // );
 
         // order added to the group is the order in which they are drawn
         root.getChildren().add(ball.getSceneNode());
@@ -162,7 +162,7 @@ public class Level {
         // check collision between the ball and the paddle
         checkAndHandleBallCollision(paddle);
 
-        ArrayList<Integer> blocksForRemoval = new ArrayList<Integer>();
+        ArrayList<Integer> blocksForRemoval = new ArrayList<>();
         for (int i = 0; i < blocks.size(); ++i) {
             Block b = blocks.get(i);
 

@@ -17,7 +17,7 @@ public class SplashScreen extends UIComponent {
 
   @Override
   protected void buildTree() {
-    textWin = new Text("YOU WON");
+    textWin = new Text("YOU WON\nPress Space to load next level");
     textWin.setFont(Font.font("Arial Black", FontWeight.BOLD, FontPosture.REGULAR, 30));
     textWin.setFill(Color.BLUE);
     textWin.setStroke(Color.WHITE);

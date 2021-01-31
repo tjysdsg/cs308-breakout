@@ -30,10 +30,9 @@ During power ups:
 
 Player can only choose to use one of the cheats in a level once:
 
-- Trigger a designated explosive block immediately.
-- Make the paddle as wide as the screen.
-- Remove an indestructible block at given position.
-- Make all fortified blocks one hit kill.
+- Press "W" to win current level immediately.
+- Press "P" to make the paddle as wide as the screen.
+- Press "F" to make all fortified blocks one hit kill.
 
 # Level designs
 

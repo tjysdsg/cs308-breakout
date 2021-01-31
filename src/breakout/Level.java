@@ -91,6 +91,13 @@ public class Level {
       }
     });
 
+    // press "W" to win this level
+    inputManager.registerInputHandler("W", val -> {
+      if (val == 1) {
+        winGame(true);
+      }
+    });
+
     // press Space to start/pause
     inputManager.registerInputHandler("Space", val -> {
       if (val == 1) {
@@ -146,8 +153,6 @@ public class Level {
     splashScreen.init();
     splashScreen.setShowRules(true);
     splashScreen.setShowWin(false);
-
-    // TODO: ask user for input to start the game
 
     // add stuff to scene
     gameRoot.getChildren().add(ball.getSceneNode());
@@ -333,6 +338,7 @@ public class Level {
     if (paused) {
       uiRoot.setVisible(true);
       gameRoot.setEffect(new GaussianBlur());
+      // TODO: when game is won and is paused, load the next level
     } else {
       uiRoot.setVisible(false);
       gameRoot.setEffect(null);
@@ -347,9 +353,18 @@ public class Level {
       }
       won = false;
     }
+    winGame(won);
+  }
+
+  private void winGame(boolean won) {
     if (won) {
+      splashScreen.setShowRules(false);
       splashScreen.setShowWin(true);
-      // TODO: pause game for 5 seconds, and load the next level
+      pauseGame(true);
+    } else {
+      splashScreen.setShowRules(false);
+      splashScreen.setShowWin(false);
+      pauseGame(false);
     }
   }
 }

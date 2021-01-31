@@ -2,6 +2,7 @@ package breakout;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 import javax.swing.Timer;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -30,6 +31,7 @@ public class Level {
   private String levelName = "Breakout";
   private KeyboardInputManager inputManager;
   private PowerUpType powerUp = PowerUpType.NONE;
+  private double powerUpTime = 0;
   private int lives = 3;
   private ArrayList<Block> blocks;
   private Ball ball;
@@ -191,6 +193,8 @@ public class Level {
   }
 
   public void step(double time) {
+    powerUpTime += time;
+
     ball.step(time);
     paddle.step(time);
 
@@ -206,6 +210,7 @@ public class Level {
 
       // check block for removal
       if (b.getBlockType() == Block.BlockType.REMOVE) {
+        triggerRandomPowerUp(); // trigger power up randomly
         blocksForRemoval.add(i);
       }
     }
@@ -215,6 +220,12 @@ public class Level {
     for (int idx : blocksForRemoval) {
       root.getChildren().remove(blocks.get(idx).getSceneNode());
       blocks.remove(idx);
+    }
+
+    // disable powerups after 5 seconds
+    if (powerUp != PowerUpType.NONE && powerUpTime >= 5.0) {
+      triggerPowerUp(PowerUpType.NONE);
+      powerUpTime = 0;
     }
 
     // check if ball is outside
@@ -248,7 +259,21 @@ public class Level {
     // TODO
   }
 
-  public void triggerPowerUp(PowerUpType type) {
+  private void triggerRandomPowerUp() {
+    // don't trigger if already in powerup
+    if (powerUp != PowerUpType.NONE) {
+      return;
+    }
+
+    Random random = new Random();
+    PowerUpType[] powerUpTypes = PowerUpType.values();
+    var p = powerUpTypes[random.nextInt(powerUpTypes.length)];
+    if (p != PowerUpType.NONE) {
+      triggerPowerUp(p);
+    }
+  }
+
+  private void triggerPowerUp(PowerUpType type) {
     powerUp = type;
     statusDisplay.setPowerUp(type);
     System.out.println("Powerup triggered: " + type);
@@ -265,9 +290,8 @@ public class Level {
       ball.setRadius(DEFAULT_BALL_RADIUS);
       paddle.setWidth(DEFAULT_PADDLE_WIDTH);
     }
-    ActionListener al = arg -> triggerPowerUp(PowerUpType.NONE);
-    Timer t = new Timer(5000, al);
-    t.start();
+
+    powerUpTime = 0;
   }
 
   public void cheat(CheatType type) {

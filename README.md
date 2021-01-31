@@ -10,7 +10,7 @@ Start Date: 01/30/2021
 
 Finish Date:
 
-Hours Spent: 12
+Hours Spent: 16
 
 ### Resources Used
 
@@ -34,6 +34,9 @@ Cheat keys:
 Assumptions or Simplifications:
 
 - Assuming running on PC, no touchscreen support
+- Collision is bugged sometimes
+- The direction of the ball can only be +-45 degrees from horizontal direction, because the
+  reflection model is too simple
 
 Known Bugs:
 

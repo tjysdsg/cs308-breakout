@@ -4,13 +4,11 @@ import breakout.Block.BlockType;
 import java.util.Random;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
@@ -26,6 +24,8 @@ public class Level {
 
   private Scene scene;
   private Group root;
+  private Group gameRoot; // parent node of game elements
+  private Group uiRoot; // parent node of UI elements
   private String levelName = "Breakout";
   private KeyboardInputManager inputManager;
   private PowerUpType powerUp = PowerUpType.NONE;
@@ -37,6 +37,7 @@ public class Level {
   private StatusDisplay statusDisplay;
   private SplashScreen splashScreen;
   private boolean won = false;
+  private boolean paused = true;
   private int score = 0;
 
   private static final int BLOCK_HEIGHT = 20;
@@ -58,7 +59,7 @@ public class Level {
 
   public Level() {
     // setup scene
-    scene = setupGame(Color.AZURE);
+    scene = setupScene(Color.AZURE);
 
     // TODO: detect touch screen and use a different input manager
     inputManager = KeyboardInputManager.globalInputManager();
@@ -70,7 +71,9 @@ public class Level {
 
   private void registerInputHandlers() {
     inputManager.registerInputHandler("Horizontal", val -> {
-      paddle.translate((int) val);
+      if (!paused) {
+        paddle.translate((int) val);
+      }
     });
 
     // press "L" to add one extra life
@@ -87,12 +90,20 @@ public class Level {
         resetLevel();
       }
     });
+
+    // press Space to start/pause
+    inputManager.registerInputHandler("Space", val -> {
+      if (val == 1) {
+        pauseGame(!paused);
+      }
+    });
   }
 
-  // Create the game's "scene": what shapes will be in the game and their starting properties
-  private Scene setupGame(Paint background) {
+  private Scene setupScene(Paint background) {
     // create one top level collection to organize the things in the scene
     root = new Group();
+    gameRoot = new Group();
+    uiRoot = new Group();
 
     // x and y represent the top left corner, so center it in window
     double screen_half_width = Main.SCREEN_WIDTH / 2.0;
@@ -139,13 +150,23 @@ public class Level {
     // TODO: ask user for input to start the game
 
     // add stuff to scene
-    root.getChildren().add(ball.getSceneNode());
-    root.getChildren().add(paddle.getSceneNode());
-    root.getChildren().add(statusDisplay.getSceneNode());
-    root.getChildren().add(splashScreen.getSceneNode());
+    gameRoot.getChildren().add(ball.getSceneNode());
+    gameRoot.getChildren().add(paddle.getSceneNode());
     for (Block b : blocks) {
-      root.getChildren().add(b.getSceneNode());
+      gameRoot.getChildren().add(b.getSceneNode());
     }
+
+    uiRoot.getChildren().add(statusDisplay.getSceneNode());
+    uiRoot.getChildren().add(splashScreen.getSceneNode());
+
+    root.getChildren().add(uiRoot);
+    root.getChildren().add(gameRoot);
+
+    // move UI nodes to the front
+    uiRoot.setViewOrder(-1000);
+
+    // pause the game first
+    pauseGame(true);
 
     // create a place to see the shapes
     return new Scene(root, Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT, background);
@@ -177,7 +198,7 @@ public class Level {
               p1, p2
           );
           ret.blocks.add(block);
-          ret.root.getChildren().add(block.getSceneNode());
+          ret.gameRoot.getChildren().add(block.getSceneNode());
         }
       }
     }
@@ -194,51 +215,53 @@ public class Level {
   }
 
   public void step(double time) {
-    powerUpTime += time;
+    if (!paused) {
+      powerUpTime += time;
 
-    ball.step(time);
-    paddle.step(time);
+      ball.step(time);
+      paddle.step(time);
 
-    // check collision between the ball and the paddle
-    checkAndHandleBallCollision(paddle);
+      // check collision between the ball and the paddle
+      checkAndHandleBallCollision(paddle);
 
-    ArrayList<Integer> blocksForRemoval = new ArrayList<>();
-    for (int i = 0; i < blocks.size(); ++i) {
-      Block b = blocks.get(i);
+      ArrayList<Integer> blocksForRemoval = new ArrayList<>();
+      for (int i = 0; i < blocks.size(); ++i) {
+        Block b = blocks.get(i);
 
-      // check collision between the ball and the blocks
-      checkAndHandleBallCollision(b);
+        // check collision between the ball and the blocks
+        checkAndHandleBallCollision(b);
 
-      // check block for removal
-      if (b.getBlockType() == Block.BlockType.REMOVE) {
-        triggerRandomPowerUp(); // trigger power up randomly
-        blocksForRemoval.add(i);
+        // check block for removal
+        if (b.getBlockType() == Block.BlockType.REMOVE) {
+          triggerRandomPowerUp(); // trigger power up randomly
+          blocksForRemoval.add(i);
+        }
       }
+
+      // remove blocks that are marked for removal
+      blocksForRemoval.sort(Collections.reverseOrder());
+      for (int idx : blocksForRemoval) {
+        // increment score
+        score += blocks.get(idx).score;
+        statusDisplay.setScore(score);
+
+        // remove from list and from scene
+        gameRoot.getChildren().remove(blocks.get(idx).getSceneNode());
+        blocks.remove(idx);
+      }
+
+      // disable powerups after 5 seconds
+      if (powerUp != PowerUpType.NONE && powerUpTime >= 5.0) {
+        triggerPowerUp(PowerUpType.NONE);
+        powerUpTime = 0;
+      }
+
+      // check if ball is outside
+      checkBallAndReset();
+
+      // check if all (non-indestructible) blocks are cleared
+      checkVictory();
     }
-
-    // remove blocks that are marked for removal
-    blocksForRemoval.sort(Collections.reverseOrder());
-    for (int idx : blocksForRemoval) {
-      // increment score
-      score += blocks.get(idx).score;
-      statusDisplay.setScore(score);
-
-      // remove from list and from scene
-      root.getChildren().remove(blocks.get(idx).getSceneNode());
-      blocks.remove(idx);
-    }
-
-    // disable powerups after 5 seconds
-    if (powerUp != PowerUpType.NONE && powerUpTime >= 5.0) {
-      triggerPowerUp(PowerUpType.NONE);
-      powerUpTime = 0;
-    }
-
-    // check if ball is outside
-    checkBallAndReset();
-
-    // check if all (non-indestructible) blocks are cleared
-    checkVictory();
   }
 
   private void checkAndHandleBallCollision(GameObject go) {
@@ -303,6 +326,17 @@ public class Level {
   }
 
   public void cheat(CheatType type) {
+  }
+
+  public void pauseGame(boolean pause) {
+    paused = pause;
+    if (paused) {
+      uiRoot.setVisible(true);
+      gameRoot.setEffect(new GaussianBlur());
+    } else {
+      uiRoot.setVisible(false);
+      gameRoot.setEffect(null);
+    }
   }
 
   public void checkVictory() {

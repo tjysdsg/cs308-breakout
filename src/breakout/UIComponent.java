@@ -35,9 +35,6 @@ public class UIComponent {
     for (Node n : children) {
       sceneNode.getChildren().add(n);
     }
-
-    // move UI nodes to the front
-    sceneNode.setViewOrder(-1000);
   }
 
   protected void buildTree() {

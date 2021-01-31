@@ -10,3 +10,5 @@ and some cannot be destroyed.
 screen, if you have 0 life left, you lose the game.
 - There is also a horizontally movable paddle that you can
 use to bounce the ball upward, keeping it in play.
+
+               Press Space key to start/pause

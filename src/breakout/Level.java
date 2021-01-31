@@ -6,7 +6,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Map;
 
 public class Level {
     private enum CheatType {
@@ -17,6 +22,7 @@ public class Level {
     }
 
     private Scene scene;
+    private Group root;
     private String levelName = "Breakout";
     private KeyboardInputManager inputManager;
     private boolean poweredUp = false;
@@ -24,6 +30,15 @@ public class Level {
     private ArrayList<Block> blocks;
     private Ball ball;
     private Paddle paddle;
+    private static final int BLOCK_HEIGHT = 20;
+
+    private static Map<Character, Block.BlockType> ASCII2BLOCK_TYPE = Map.of(
+            '@', Block.BlockType.NORMAL,
+            '#', Block.BlockType.FORTIFIED,
+            '$', Block.BlockType.EXPLOSIVE,
+            '*', Block.BlockType.INDESTRUCTIBLE,
+            '=', Block.BlockType.MOVING
+    );
 
     public Level() {
         // setup scene
@@ -41,7 +56,7 @@ public class Level {
     // Create the game's "scene": what shapes will be in the game and their starting properties
     private Scene setupGame(Paint background) {
         // create one top level collection to organize the things in the scene
-        Group root = new Group();
+        root = new Group();
 
         // x and y represent the top left corner, so center it in window
         double screen_half_width = (double) Main.SCREEN_WIDTH / 2;
@@ -80,13 +95,56 @@ public class Level {
         root.getChildren().add(ball.getSceneNode());
         root.getChildren().add(paddle.getSceneNode());
 
+        for (Block b : blocks) {
+            root.getChildren().add(b.getSceneNode());
+        }
+
         // create a place to see the shapes
         return new Scene(root, Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT, background);
     }
 
     public static Level fromLevelFile(String filename) {
-        // TODO: read from level file
-        return new Level();
+        Level ret = new Level();
+
+        // read level file to String
+        // https://stackoverflow.com/a/46613809/7730917
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        InputStream is = classLoader.getResourceAsStream(filename);
+        if (is == null) {
+            System.err.println("WARNING: Cannot read level file: " + filename);
+            return ret;
+        }
+        InputStreamReader isr = new InputStreamReader(is);
+        BufferedReader reader = new BufferedReader(isr);
+
+        // String levelString = reader.lines().collect(Collectors.joining(System.lineSeparator()));
+        // System.out.println(levelString);
+
+        // create and add blocks
+        String[] lines = reader.lines().toArray(String[]::new);
+        int nCols = lines[0].length();
+        int blockWidth = Main.SCREEN_WIDTH / nCols;
+
+        for (int r = 0; r < lines.length; ++r) {
+            for (int c = 0; c < nCols; ++c) {
+                Vec2D p1 = new Vec2D(c * blockWidth, r * BLOCK_HEIGHT);
+                Vec2D p2 = new Vec2D(p1.getX() + blockWidth, p1.getY() + BLOCK_HEIGHT);
+                if (c >= lines[r].length()) {
+                    continue;
+                }
+                char ch = lines[r].charAt(c);
+                if (ch != ' ') {
+                    Block block = new Block(
+                            ASCII2BLOCK_TYPE.get(ch),
+                            p1, p2
+                    );
+                    ret.blocks.add(block);
+                    ret.root.getChildren().add(block.getSceneNode());
+                }
+            }
+        }
+
+        return ret;
     }
 
     public Scene getScene() {
@@ -101,17 +159,35 @@ public class Level {
         ball.step(time);
         paddle.step(time);
 
-        // check collisions
-        checkAndHandleBallCollision(paddle.getCollider());
-        for (Block b : blocks) {
-            checkAndHandleBallCollision(b.getCollider());
+        // check collision between the ball and the paddle
+        checkAndHandleBallCollision(paddle);
+
+        ArrayList<Integer> blocksForRemoval = new ArrayList<Integer>();
+        for (int i = 0; i < blocks.size(); ++i) {
+            Block b = blocks.get(i);
+
+            // check collision between the ball and the blocks
+            checkAndHandleBallCollision(b);
+
+            // check block for removal
+            if (b.getBlockType() == Block.BlockType.REMOVE) {
+                blocksForRemoval.add(i);
+            }
+        }
+
+        // remove blocks that are marked for removal
+        blocksForRemoval.sort(Collections.reverseOrder());
+        for (int idx : blocksForRemoval) {
+            root.getChildren().remove(blocks.get(idx).getSceneNode());
+            blocks.remove(idx);
         }
     }
 
-    private void checkAndHandleBallCollision(Collider b) {
-        Collision collision = Collider.checkCollision(ball.getCollider(), b);
+    private void checkAndHandleBallCollision(GameObject go) {
+        Collision collision = Collider.checkCollision(ball.getCollider(), go.getCollider());
         if (collision != null) {
-            BallCollisionHandler.handle(ball, collision, poweredUp);
+            ball.handleCollision(collision, poweredUp);
+            go.handleCollision(collision, poweredUp);
         }
     }
 

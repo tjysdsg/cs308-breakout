@@ -40,6 +40,17 @@ public class Ball extends GameObject {
         sceneNode.setY(pos.getY() - radius);
     }
 
+    @Override
+    public void handleCollision(Collision collision, boolean powered) {
+        Vec2D normal = collision.normal;
+        double vMag = v.magnitude();
+        double cosAngle = v.dot(normal) / vMag;
+        Vec2D vProj = normal.mul(-cosAngle * vMag);
+        Vec2D perp = v.add(vProj);
+        Vec2D out = vProj.add(perp);
+        setVelocity(out);
+    }
+
     public Vec2D getVelocity() {
         return v;
     }

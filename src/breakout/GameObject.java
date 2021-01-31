@@ -22,4 +22,7 @@ public class GameObject {
     public void setPos(Vec2D pos) {
         this.pos = pos;
     }
+
+    public void handleCollision(Collision collision, boolean powered) {
+    }
 }

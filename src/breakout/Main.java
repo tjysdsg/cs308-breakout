@@ -23,7 +23,7 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage stage) {
-        level = Level.fromLevelFile(""); // TODO: level file
+        level = Level.fromLevelFile("level1.txt");
         // attach scene to the stage and display it
         stage.setScene(level.getScene());
         stage.setTitle(level.getLevelName());

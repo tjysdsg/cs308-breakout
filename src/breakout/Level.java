@@ -37,6 +37,7 @@ public class Level {
   private StatusDisplay statusDisplay;
   private SplashScreen splashScreen;
   private boolean won = false;
+  private int score = 0;
 
   private static final int BLOCK_HEIGHT = 20;
   private static final double DEFAULT_BALL_MAX_VELOCITY = 200;
@@ -46,13 +47,14 @@ public class Level {
   private static final double POWERUP_BALL_RADIUS = 12;
   private static final double POWERUP_PADDLE_WIDTH = 110;
 
-  private static Map<Character, Block.BlockType> ASCII2BLOCK_TYPE = Map.of(
+  private static final Map<Character, Block.BlockType> ASCII2BLOCK_TYPE = Map.of(
       '@', Block.BlockType.NORMAL,
       '#', Block.BlockType.FORTIFIED,
       '$', Block.BlockType.EXPLOSIVE,
       '*', Block.BlockType.INDESTRUCTIBLE,
       '=', Block.BlockType.MOVING
   );
+
 
   public Level() {
     // setup scene
@@ -226,6 +228,10 @@ public class Level {
     // remove blocks that are marked for removal
     blocksForRemoval.sort(Collections.reverseOrder());
     for (int idx : blocksForRemoval) {
+      score += blocks.get(idx).score; // increment score
+      statusDisplay.setScore(score);
+
+      // remove from list and from scene
       root.getChildren().remove(blocks.get(idx).getSceneNode());
       blocks.remove(idx);
     }

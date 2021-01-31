@@ -18,6 +18,16 @@ public class Block extends GameObject {
     REMOVE, // mark as removed, so `Level` can remove it from the scene
   }
 
+  private static final Map<Block.BlockType, Integer> BLOCK_SCORE = Map.of(
+      Block.BlockType.NORMAL, 1,
+      Block.BlockType.FORTIFIED, 2,
+      Block.BlockType.EXPLOSIVE, 1,
+      Block.BlockType.INDESTRUCTIBLE, 0,
+      Block.BlockType.MOVING, 2
+  );
+
+  public int score;
+
   private static final Map<BlockType, String> IMAGE = Map.of(
       BlockType.NORMAL, "brick2.gif",
       BlockType.FORTIFIED, "brick8.gif",
@@ -46,6 +56,7 @@ public class Block extends GameObject {
     this.health = HEALTH.get(this.type);
     this.p1 = p1;
     this.p2 = p2;
+    this.score = BLOCK_SCORE.get(this.type);
 
     // init image
     sceneNode = new ImageView();

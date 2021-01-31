@@ -13,8 +13,10 @@ import javafx.scene.text.Text;
 public class StatusDisplay extends UIComponent {
 
   private int lives;
+  private int score = 0;
   private PowerUpType powerUp;
   private Text lifeCount;
+  private Text scoreDisplay;
   private ImageView powerUpIndicator;
 
   private static final Map<PowerUpType, String> powerUpIcons = Map.of(
@@ -41,6 +43,7 @@ public class StatusDisplay extends UIComponent {
     lifeCount.setStroke(Color.WHITE);
     lifeCount.setStrokeWidth(1.0);
 
+    // heart icon
     Image heartImage = new Image(Objects.requireNonNull(
         this.getClass().getClassLoader().getResourceAsStream("heart.png")
     ));
@@ -49,6 +52,15 @@ public class StatusDisplay extends UIComponent {
     heartIcon.setY(pos.getY() + 3);
     heartIcon.setFitWidth(25);
     heartIcon.setFitHeight(25);
+
+    // score display
+    scoreDisplay = new Text("Score: " + score);
+    scoreDisplay.setX(pos.getX() + 50);
+    scoreDisplay.setY(pos.getY() + 20);
+    scoreDisplay.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+    scoreDisplay.setFill(Color.BLUE);
+    scoreDisplay.setStroke(Color.WHITE);
+    scoreDisplay.setStrokeWidth(1.0);
 
     // power up icon
     powerUpIndicator = new ImageView();
@@ -61,12 +73,18 @@ public class StatusDisplay extends UIComponent {
     // add to child components
     children.add(heartIcon);
     children.add(lifeCount);
+    children.add(scoreDisplay);
     children.add(powerUpIndicator);
   }
 
   public void setLives(int lives) {
     this.lives = lives;
     lifeCount.setText("" + lives);
+  }
+
+  public void setScore(int score) {
+    this.score = score;
+    scoreDisplay.setText("Score: " + lives);
   }
 
   private void updatePowerUpIcon() {

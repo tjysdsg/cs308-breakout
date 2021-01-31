@@ -10,7 +10,7 @@ Start Date: 01/30/2021
 
 Finish Date:
 
-Hours Spent: 6 + ? + ? = ?
+Hours Spent: 12
 
 ### Resources Used
 

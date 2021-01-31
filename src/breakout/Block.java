@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import java.util.Map;
 import java.util.Objects;
 
+// TODO: implement explosive and moving block
 public class Block extends GameObject {
 
   public enum BlockType {
@@ -46,16 +47,23 @@ public class Block extends GameObject {
     this.p1 = p1;
     this.p2 = p2;
 
-    Image image = new Image(Objects.requireNonNull(
-        this.getClass().getClassLoader().getResourceAsStream(IMAGE.get(type))
-    ));
-    sceneNode = new ImageView(image);
+    // init image
+    sceneNode = new ImageView();
+    updateBlockImage();
     sceneNode.setFitWidth(p2.getX() - p1.getX());
     sceneNode.setFitHeight(p2.getY() - p1.getY());
     sceneNode.setX(p1.getX());
     sceneNode.setY(p1.getY());
 
+    // init collider
     collider = new BlockCollider(this.p1, this.p2);
+  }
+
+  public void updateBlockImage() {
+    Image image = new Image(Objects.requireNonNull(
+        this.getClass().getClassLoader().getResourceAsStream(IMAGE.get(type))
+    ));
+    sceneNode.setImage(image);
   }
 
   @Override
@@ -63,6 +71,9 @@ public class Block extends GameObject {
     --health;
     if (type != BlockType.INDESTRUCTIBLE && health <= 0) {
       type = BlockType.REMOVE;
+    } else if (type == BlockType.FORTIFIED && health == 1) {
+      type = BlockType.NORMAL;
+      updateBlockImage();
     }
   }
 

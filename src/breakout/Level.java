@@ -14,207 +14,208 @@ import java.util.Collections;
 import java.util.Map;
 
 public class Level {
-    private enum CheatType {
-        TRIGGER_EXPLOSION,
-        WIDE_PADDLE,
-        REMOVE_INDESTRUCTIBLE,
-        ONE_HIT_FORTIFIED,
-    }
 
-    private Scene scene;
-    private Group root;
-    private String levelName = "Breakout";
-    private KeyboardInputManager inputManager;
-    private boolean poweredUp = false;
-    private int lives = 3;
-    private ArrayList<Block> blocks;
-    private Ball ball;
-    private Paddle paddle;
-    private static final int BLOCK_HEIGHT = 20;
+  private enum CheatType {
+    TRIGGER_EXPLOSION,
+    WIDE_PADDLE,
+    REMOVE_INDESTRUCTIBLE,
+    ONE_HIT_FORTIFIED,
+  }
 
-    private static Map<Character, Block.BlockType> ASCII2BLOCK_TYPE = Map.of(
-            '@', Block.BlockType.NORMAL,
-            '#', Block.BlockType.FORTIFIED,
-            '$', Block.BlockType.EXPLOSIVE,
-            '*', Block.BlockType.INDESTRUCTIBLE,
-            '=', Block.BlockType.MOVING
+  private Scene scene;
+  private Group root;
+  private String levelName = "Breakout";
+  private KeyboardInputManager inputManager;
+  private boolean poweredUp = false;
+  private int lives = 3;
+  private ArrayList<Block> blocks;
+  private Ball ball;
+  private Paddle paddle;
+  private static final int BLOCK_HEIGHT = 20;
+
+  private static Map<Character, Block.BlockType> ASCII2BLOCK_TYPE = Map.of(
+      '@', Block.BlockType.NORMAL,
+      '#', Block.BlockType.FORTIFIED,
+      '$', Block.BlockType.EXPLOSIVE,
+      '*', Block.BlockType.INDESTRUCTIBLE,
+      '=', Block.BlockType.MOVING
+  );
+
+  public Level() {
+    // setup scene
+    scene = setupGame(Color.AZURE);
+
+    // register input manager
+    // TODO: detect touch screen and use a different input manager
+    inputManager = KeyboardInputManager.globalInputManager();
+    inputManager.registerInputHandler("Horizontal", val -> {
+      paddle.translate((int) val);
+    });
+    scene.addEventHandler(KeyEvent.ANY, inputManager);
+  }
+
+  // Create the game's "scene": what shapes will be in the game and their starting properties
+  private Scene setupGame(Paint background) {
+    // create one top level collection to organize the things in the scene
+    root = new Group();
+
+    // x and y represent the top left corner, so center it in window
+    double screen_half_width = Main.SCREEN_WIDTH / 2.0;
+    double screen_half_height = Main.SCREEN_HEIGHT / 2.0;
+
+    // init ball
+    ball = new Ball(screen_half_width, screen_half_height);
+
+    // init paddle
+    paddle = new Paddle(screen_half_width, Main.SCREEN_HEIGHT - 20);
+
+    // init 4 blocks at screen edges
+    blocks = new ArrayList<>();
+    blocks.add(new Block(                                              // left
+        Block.BlockType.INDESTRUCTIBLE,
+        new Vec2D(-100, -100),
+        new Vec2D(0, Main.SCREEN_HEIGHT + 100))
     );
+    blocks.add(new Block(                                              // right
+        Block.BlockType.INDESTRUCTIBLE,
+        new Vec2D(Main.SCREEN_WIDTH, -100),
+        new Vec2D(Main.SCREEN_WIDTH + 100, Main.SCREEN_HEIGHT + 100))
+    );
+    blocks.add(new Block(                                              // top
+        Block.BlockType.INDESTRUCTIBLE,
+        new Vec2D(-100, -100),
+        new Vec2D(Main.SCREEN_WIDTH + 100, 0))
+    );
+    // blocks.add(new Block(                                              // bottom
+    //         Block.BlockType.INDESTRUCTIBLE,
+    //         new Vec2D(-100, Main.SCREEN_HEIGHT),
+    //         new Vec2D(Main.SCREEN_WIDTH + 100, Main.SCREEN_HEIGHT + 100))
+    // );
 
-    public Level() {
-        // setup scene
-        scene = setupGame(Color.AZURE);
+    // order added to the group is the order in which they are drawn
+    root.getChildren().add(ball.getSceneNode());
+    root.getChildren().add(paddle.getSceneNode());
 
-        // register input manager
-        // TODO: detect touch screen and use a different input manager
-        inputManager = KeyboardInputManager.globalInputManager();
-        inputManager.registerInputHandler("Horizontal", val -> {
-            paddle.translate((int) val);
-        });
-        scene.addEventHandler(KeyEvent.ANY, inputManager);
+    for (Block b : blocks) {
+      root.getChildren().add(b.getSceneNode());
     }
 
-    // Create the game's "scene": what shapes will be in the game and their starting properties
-    private Scene setupGame(Paint background) {
-        // create one top level collection to organize the things in the scene
-        root = new Group();
+    // create a place to see the shapes
+    return new Scene(root, Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT, background);
+  }
 
-        // x and y represent the top left corner, so center it in window
-        double screen_half_width = Main.SCREEN_WIDTH / 2.0;
-        double screen_half_height = Main.SCREEN_HEIGHT / 2.0;
+  public static Level fromLevelFile(String filename) {
+    Level ret = new Level();
 
-        // init ball
-        ball = new Ball(screen_half_width, screen_half_height);
+    // read level file to String
+    // https://stackoverflow.com/a/46613809/7730917
+    ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+    InputStream is = classLoader.getResourceAsStream(filename);
+    if (is == null) {
+      System.err.println("WARNING: Cannot read level file: " + filename);
+      return ret;
+    }
+    InputStreamReader isr = new InputStreamReader(is);
+    BufferedReader reader = new BufferedReader(isr);
 
-        // init paddle
-        paddle = new Paddle(screen_half_width, Main.SCREEN_HEIGHT - 20);
+    // String levelString = reader.lines().collect(Collectors.joining(System.lineSeparator()));
+    // System.out.println(levelString);
 
-        // init 4 blocks at screen edges
-        blocks = new ArrayList<>();
-        blocks.add(new Block(                                              // left
-                Block.BlockType.INDESTRUCTIBLE,
-                new Vec2D(-100, -100),
-                new Vec2D(0, Main.SCREEN_HEIGHT + 100))
-        );
-        blocks.add(new Block(                                              // right
-                Block.BlockType.INDESTRUCTIBLE,
-                new Vec2D(Main.SCREEN_WIDTH, -100),
-                new Vec2D(Main.SCREEN_WIDTH + 100, Main.SCREEN_HEIGHT + 100))
-        );
-        blocks.add(new Block(                                              // top
-                Block.BlockType.INDESTRUCTIBLE,
-                new Vec2D(-100, -100),
-                new Vec2D(Main.SCREEN_WIDTH + 100, 0))
-        );
-        // blocks.add(new Block(                                              // bottom
-        //         Block.BlockType.INDESTRUCTIBLE,
-        //         new Vec2D(-100, Main.SCREEN_HEIGHT),
-        //         new Vec2D(Main.SCREEN_WIDTH + 100, Main.SCREEN_HEIGHT + 100))
-        // );
+    // create and add blocks
+    String[] lines = reader.lines().toArray(String[]::new);
+    int nCols = lines[0].length();
+    int blockWidth = Main.SCREEN_WIDTH / nCols;
 
-        // order added to the group is the order in which they are drawn
-        root.getChildren().add(ball.getSceneNode());
-        root.getChildren().add(paddle.getSceneNode());
-
-        for (Block b : blocks) {
-            root.getChildren().add(b.getSceneNode());
+    for (int r = 0; r < lines.length; ++r) {
+      for (int c = 0; c < nCols; ++c) {
+        Vec2D p1 = new Vec2D(c * blockWidth, r * BLOCK_HEIGHT);
+        Vec2D p2 = new Vec2D(p1.getX() + blockWidth, p1.getY() + BLOCK_HEIGHT);
+        if (c >= lines[r].length()) {
+          continue;
         }
-
-        // create a place to see the shapes
-        return new Scene(root, Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT, background);
-    }
-
-    public static Level fromLevelFile(String filename) {
-        Level ret = new Level();
-
-        // read level file to String
-        // https://stackoverflow.com/a/46613809/7730917
-        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-        InputStream is = classLoader.getResourceAsStream(filename);
-        if (is == null) {
-            System.err.println("WARNING: Cannot read level file: " + filename);
-            return ret;
+        char ch = lines[r].charAt(c);
+        if (ch != ' ') {
+          Block block = new Block(
+              ASCII2BLOCK_TYPE.get(ch),
+              p1, p2
+          );
+          ret.blocks.add(block);
+          ret.root.getChildren().add(block.getSceneNode());
         }
-        InputStreamReader isr = new InputStreamReader(is);
-        BufferedReader reader = new BufferedReader(isr);
-
-        // String levelString = reader.lines().collect(Collectors.joining(System.lineSeparator()));
-        // System.out.println(levelString);
-
-        // create and add blocks
-        String[] lines = reader.lines().toArray(String[]::new);
-        int nCols = lines[0].length();
-        int blockWidth = Main.SCREEN_WIDTH / nCols;
-
-        for (int r = 0; r < lines.length; ++r) {
-            for (int c = 0; c < nCols; ++c) {
-                Vec2D p1 = new Vec2D(c * blockWidth, r * BLOCK_HEIGHT);
-                Vec2D p2 = new Vec2D(p1.getX() + blockWidth, p1.getY() + BLOCK_HEIGHT);
-                if (c >= lines[r].length()) {
-                    continue;
-                }
-                char ch = lines[r].charAt(c);
-                if (ch != ' ') {
-                    Block block = new Block(
-                            ASCII2BLOCK_TYPE.get(ch),
-                            p1, p2
-                    );
-                    ret.blocks.add(block);
-                    ret.root.getChildren().add(block.getSceneNode());
-                }
-            }
-        }
-
-        return ret;
+      }
     }
 
-    public Scene getScene() {
-        return scene;
+    return ret;
+  }
+
+  public Scene getScene() {
+    return scene;
+  }
+
+  public String getLevelName() {
+    return levelName;
+  }
+
+  public void step(double time) {
+    ball.step(time);
+    paddle.step(time);
+
+    // check collision between the ball and the paddle
+    checkAndHandleBallCollision(paddle);
+
+    ArrayList<Integer> blocksForRemoval = new ArrayList<>();
+    for (int i = 0; i < blocks.size(); ++i) {
+      Block b = blocks.get(i);
+
+      // check collision between the ball and the blocks
+      checkAndHandleBallCollision(b);
+
+      // check block for removal
+      if (b.getBlockType() == Block.BlockType.REMOVE) {
+        blocksForRemoval.add(i);
+      }
     }
 
-    public String getLevelName() {
-        return levelName;
+    // remove blocks that are marked for removal
+    blocksForRemoval.sort(Collections.reverseOrder());
+    for (int idx : blocksForRemoval) {
+      root.getChildren().remove(blocks.get(idx).getSceneNode());
+      blocks.remove(idx);
     }
 
-    public void step(double time) {
-        ball.step(time);
-        paddle.step(time);
+    // check if ball is outside
+    checkBallAndReset();
 
-        // check collision between the ball and the paddle
-        checkAndHandleBallCollision(paddle);
+    // check if all (non-indestructible) blocks are cleared
+    checkVictory();
+  }
 
-        ArrayList<Integer> blocksForRemoval = new ArrayList<>();
-        for (int i = 0; i < blocks.size(); ++i) {
-            Block b = blocks.get(i);
-
-            // check collision between the ball and the blocks
-            checkAndHandleBallCollision(b);
-
-            // check block for removal
-            if (b.getBlockType() == Block.BlockType.REMOVE) {
-                blocksForRemoval.add(i);
-            }
-        }
-
-        // remove blocks that are marked for removal
-        blocksForRemoval.sort(Collections.reverseOrder());
-        for (int idx : blocksForRemoval) {
-            root.getChildren().remove(blocks.get(idx).getSceneNode());
-            blocks.remove(idx);
-        }
-
-        // check if ball is outside
-        checkBallAndReset();
-
-        // check if all (non-indestructible) blocks are cleared
-        checkVictory();
+  private void checkAndHandleBallCollision(GameObject go) {
+    Collision collision = Collider.checkCollision(ball.getCollider(), go.getCollider());
+    if (collision != null) {
+      ball.handleCollision(collision, poweredUp);
+      go.handleCollision(collision, poweredUp);
     }
+  }
 
-    private void checkAndHandleBallCollision(GameObject go) {
-        Collision collision = Collider.checkCollision(ball.getCollider(), go.getCollider());
-        if (collision != null) {
-            ball.handleCollision(collision, poweredUp);
-            go.handleCollision(collision, poweredUp);
-        }
+  private void checkBallAndReset() {
+    if (ball.getPos().getY() + ball.getRadius() >= Main.SCREEN_HEIGHT) {
+      --lives;
+      ball.reset(Main.SCREEN_WIDTH / 2.0, Main.SCREEN_HEIGHT / 2.0);
     }
+    if (lives <= 0) {
+      // TODO: tell user no lives left
+      System.out.println("You're dead");
+    }
+  }
 
-    private void checkBallAndReset() {
-        if (ball.getPos().getY() + ball.getRadius() >= Main.SCREEN_HEIGHT) {
-            --lives;
-            ball.reset(Main.SCREEN_WIDTH / 2.0, Main.SCREEN_HEIGHT / 2.0);
-        }
-        if (lives <= 0) {
-            // TODO: tell user no lives left
-            System.out.println("You're dead");
-        }
-    }
+  public void checkVictory() {
+    // TODO
+  }
 
-    public void checkVictory() {
-        // TODO
-    }
+  public void cheat(CheatType type) {
+  }
 
-    public void cheat(CheatType type) {
-    }
-
-    public void checkAndHandleCollision() {
-    }
+  public void checkAndHandleCollision() {
+  }
 }

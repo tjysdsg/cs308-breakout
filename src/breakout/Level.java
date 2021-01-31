@@ -248,6 +248,7 @@ public class Level {
       // FIXME: velocity being too high (about 400) will break the collision detection (CCD needed)
       ball.setMaxVelocity(300);
     } else if (type == PowerUpType.LARGE_BALL) {
+      ball.setRadius(13);
     } else if (type == PowerUpType.WIDE_PADDLE) {
     }
     // TODO

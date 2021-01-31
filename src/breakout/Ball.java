@@ -76,6 +76,13 @@ public class Ball extends GameObject {
     scaleVelocityToMax();
   }
 
+  public void setRadius(double radius) {
+    this.radius = radius;
+    ((SphereCollider) this.collider).setPos(pos, this.radius);
+    sceneNode.setFitWidth(radius * 2);
+    sceneNode.setFitHeight(radius * 2);
+  }
+
   private void scaleVelocityToMax() {
     double m = this.v.magnitude();
     this.v = this.v.mul(maxVelocity / m);

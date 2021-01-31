@@ -247,7 +247,4 @@ public class Level {
 
   public void cheat(CheatType type) {
   }
-
-  public void checkAndHandleCollision() {
-  }
 }

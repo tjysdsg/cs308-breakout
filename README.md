@@ -34,11 +34,13 @@ Cheat keys:
 Assumptions or Simplifications:
 
 - Assuming running on PC, no touchscreen support
-- Collision is bugged sometimes
 - The direction of the ball can only be +-45 degrees from horizontal direction, because the
   reflection model is too simple
 
 Known Bugs:
+
+- Sometimes the ball pass through the block and collide with the inner side of it
+- The game stop working when the 3rd level is won
 
 Extra credit:
 

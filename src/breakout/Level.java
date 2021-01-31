@@ -39,6 +39,7 @@ public class Level {
   private boolean won = false;
   private boolean paused = true;
   private int score = 0;
+  private int levelIdx = 1;
 
   private static final int BLOCK_HEIGHT = 20;
   private static final double DEFAULT_BALL_MAX_VELOCITY = 200;
@@ -56,17 +57,20 @@ public class Level {
       '=', Block.BlockType.MOVING
   );
 
-
   public Level() {
-    // setup scene
-    scene = setupScene(Color.AZURE);
+    blocks = new ArrayList<>();
+    root = new Group();
+    gameRoot = new Group();
+    uiRoot = new Group();
 
-    // TODO: detect touch screen and use a different input manager
-    inputManager = KeyboardInputManager.globalInputManager();
-    // register input handlers
-    registerInputHandlers();
+    scene = new Scene(root, Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT, Color.AZURE);
+
     // register the input manager
+    inputManager = KeyboardInputManager.globalInputManager();
+    registerInputHandlers();
     scene.addEventHandler(KeyEvent.ANY, inputManager);
+
+    setupUI();
   }
 
   private void registerInputHandlers() {
@@ -94,6 +98,7 @@ public class Level {
     // press "W" to win this level
     inputManager.registerInputHandler("W", val -> {
       if (val == 1) {
+        won = true;
         winGame(true);
       }
     });
@@ -101,18 +106,23 @@ public class Level {
     // press Space to start/pause
     inputManager.registerInputHandler("Space", val -> {
       if (val == 1) {
-        pauseGame(!paused);
+        if (won) {
+          System.out.println("Loading the next level...");
+          loadNextLevel();
+          splashScreen.setShowRules(true);
+          splashScreen.setShowWin(false);
+          won = false;
+        } else {
+          pauseGame(!paused);
+        }
       }
     });
   }
 
-  private Scene setupScene(Paint background) {
-    // create one top level collection to organize the things in the scene
-    root = new Group();
-    gameRoot = new Group();
-    uiRoot = new Group();
-
-    // x and y represent the top left corner, so center it in window
+  /**
+   * Setup the ball, the paddle and the blocks
+   */
+  private void setupGameScene() {
     double screen_half_width = Main.SCREEN_WIDTH / 2.0;
     double screen_half_height = Main.SCREEN_HEIGHT / 2.0;
 
@@ -123,7 +133,6 @@ public class Level {
     paddle = new Paddle();
 
     // init 4 blocks at screen edges
-    blocks = new ArrayList<>();
     blocks.add(new Block(                                              // left
         Block.BlockType.INDESTRUCTIBLE,
         new Vec2D(-100, -100),
@@ -144,7 +153,18 @@ public class Level {
     //         new Vec2D(-100, Main.SCREEN_HEIGHT),
     //         new Vec2D(Main.SCREEN_WIDTH + 100, Main.SCREEN_HEIGHT + 100))
     // );
+    gameRoot.getChildren().add(ball.getSceneNode());
+    gameRoot.getChildren().add(paddle.getSceneNode());
 
+    for (Block b : blocks) {
+      gameRoot.getChildren().add(b.getSceneNode());
+    }
+
+    // pause the game first
+    pauseGame(true);
+  }
+
+  private void setupUI() {
     // UI elements
     statusDisplay = new StatusDisplay(new Vec2D(0, 0), lives, powerUp);
     statusDisplay.init();
@@ -154,13 +174,7 @@ public class Level {
     splashScreen.setShowRules(true);
     splashScreen.setShowWin(false);
 
-    // add stuff to scene
-    gameRoot.getChildren().add(ball.getSceneNode());
-    gameRoot.getChildren().add(paddle.getSceneNode());
-    for (Block b : blocks) {
-      gameRoot.getChildren().add(b.getSceneNode());
-    }
-
+    // setup scene tree
     uiRoot.getChildren().add(statusDisplay.getSceneNode());
     uiRoot.getChildren().add(splashScreen.getSceneNode());
 
@@ -169,21 +183,18 @@ public class Level {
 
     // move UI nodes to the front
     uiRoot.setViewOrder(-1000);
-
-    // pause the game first
-    pauseGame(true);
-
-    // create a place to see the shapes
-    return new Scene(root, Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT, background);
   }
 
-  public static Level fromLevelFile(String filename) {
-    Level ret = new Level();
+  public void fromLevelFile(String filename) {
+    blocks.clear();
+    gameRoot.getChildren().clear();
+
+    setupGameScene();
 
     String[] lines = Util.readResourceTxtToLines(filename);
     if (lines == null) {
       System.err.println("WARNING: Cannot read level file: " + filename);
-      return ret;
+      return;
     }
 
     int nCols = lines[0].length();
@@ -202,13 +213,11 @@ public class Level {
               ASCII2BLOCK_TYPE.get(ch),
               p1, p2
           );
-          ret.blocks.add(block);
-          ret.gameRoot.getChildren().add(block.getSceneNode());
+          blocks.add(block);
+          gameRoot.getChildren().add(block.getSceneNode());
         }
       }
     }
-
-    return ret;
   }
 
   public Scene getScene() {
@@ -336,13 +345,14 @@ public class Level {
   public void pauseGame(boolean pause) {
     paused = pause;
     if (paused) {
-      uiRoot.setVisible(true);
       gameRoot.setEffect(new GaussianBlur());
-      // TODO: when game is won and is paused, load the next level
     } else {
-      uiRoot.setVisible(false);
       gameRoot.setEffect(null);
     }
+  }
+
+  private void loadNextLevel() {
+    fromLevelFile("level" + (++levelIdx) + ".txt");
   }
 
   public void checkVictory() {

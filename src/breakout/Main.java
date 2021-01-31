@@ -24,8 +24,8 @@ public class Main extends Application {
    */
   @Override
   public void start(Stage stage) {
-    // level = Level.fromLevelFile("level1.txt");
-    level = Level.fromLevelFile("test_level.txt");
+    level = new Level();
+    level.fromLevelFile("level1.txt");
     // attach scene to the stage and display it
     stage.setScene(level.getScene());
     stage.setTitle(level.getLevelName());
@@ -40,8 +40,6 @@ public class Main extends Application {
 
   private void step(double time) {
     level.step(time);
-    // Shape intersection = Shape.intersect(mover, grower);
-    // if (intersection.getBoundsInLocal().getWidth() != -1) {
   }
 
   /**

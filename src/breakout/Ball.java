@@ -49,7 +49,7 @@ public class Ball extends GameObject {
   }
 
   @Override
-  public void handleCollision(Collision collision, PowerUpType powerUp) {
+  public void handleCollision(Collision collision) {
     Vec2D normal = collision.normal;
     double vMag = v.magnitude();
     double cosAngle = v.dot(normal) / vMag;

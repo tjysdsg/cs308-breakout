@@ -59,7 +59,7 @@ public class Block extends GameObject {
   }
 
   @Override
-  public void handleCollision(Collision collision, PowerUpType powerUp) {
+  public void handleCollision(Collision collision) {
     --health;
     if (type != BlockType.INDESTRUCTIBLE && health <= 0) {
       type = BlockType.REMOVE;

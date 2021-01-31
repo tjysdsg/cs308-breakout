@@ -198,8 +198,8 @@ public class Level {
   private void checkAndHandleBallCollision(GameObject go) {
     Collision collision = Collider.checkCollision(ball.getCollider(), go.getCollider());
     if (collision != null) {
-      ball.handleCollision(collision, powerUp);
-      go.handleCollision(collision, powerUp);
+      ball.handleCollision(collision);
+      go.handleCollision(collision);
     }
   }
 

@@ -28,6 +28,6 @@ public class GameObject {
     this.pos = pos;
   }
 
-  public void handleCollision(Collision collision, PowerUpType powerUp) {
+  public void handleCollision(Collision collision) {
   }
 }

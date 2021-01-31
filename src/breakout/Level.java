@@ -1,9 +1,6 @@
 package breakout;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Random;
-import javax.swing.Timer;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;

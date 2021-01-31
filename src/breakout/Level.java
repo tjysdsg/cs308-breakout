@@ -35,6 +35,7 @@ public class Level {
   private Ball ball;
   private Paddle paddle;
   private StatusDisplay statusDisplay;
+  private SplashScreen splashScreen;
   private boolean won = false;
 
   private static final int BLOCK_HEIGHT = 20;
@@ -123,18 +124,25 @@ public class Level {
     //         new Vec2D(Main.SCREEN_WIDTH + 100, Main.SCREEN_HEIGHT + 100))
     // );
 
-    // order added to the group is the order in which they are drawn
-    root.getChildren().add(ball.getSceneNode());
-    root.getChildren().add(paddle.getSceneNode());
-
-    for (Block b : blocks) {
-      root.getChildren().add(b.getSceneNode());
-    }
-
     // UI elements
     statusDisplay = new StatusDisplay(new Vec2D(0, 0), lives, powerUp);
     statusDisplay.init();
+
+    splashScreen = new SplashScreen();
+    splashScreen.init();
+    splashScreen.setShowRules(true);
+    splashScreen.setShowWin(false);
+
+    // TODO: ask user for input to start the game
+
+    // add stuff to scene
+    root.getChildren().add(ball.getSceneNode());
+    root.getChildren().add(paddle.getSceneNode());
     root.getChildren().add(statusDisplay.getSceneNode());
+    root.getChildren().add(splashScreen.getSceneNode());
+    for (Block b : blocks) {
+      root.getChildren().add(b.getSceneNode());
+    }
 
     // create a place to see the shapes
     return new Scene(root, Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT, background);
@@ -302,7 +310,8 @@ public class Level {
       won = false;
     }
     if (won) {
-      System.out.println("WON");
+      splashScreen.setShowWin(true);
+      // TODO: pause game for 5 seconds, and load the next level
     }
   }
 }

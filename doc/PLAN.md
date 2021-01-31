@@ -24,7 +24,7 @@
 During power ups:
 
 - The ball moves in a higher speed during power ups.
-- The paddle and walls reflect the ball in a larger angle of emergence than normal.
+- The ball becomes larger.
 - The paddle can wrap around the edge of the screen without movement speed penalty.
 
 # Cheat keys

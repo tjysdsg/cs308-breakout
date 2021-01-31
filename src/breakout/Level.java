@@ -26,11 +26,12 @@ public class Level {
   private Group root;
   private String levelName = "Breakout";
   private KeyboardInputManager inputManager;
-  private boolean poweredUp = false;
+  private PowerUpType powerUp = PowerUpType.NONE;
   private int lives = 3;
   private ArrayList<Block> blocks;
   private Ball ball;
   private Paddle paddle;
+  private StatusDisplay statusDisplay;
   private static final int BLOCK_HEIGHT = 20;
 
   private static Map<Character, Block.BlockType> ASCII2BLOCK_TYPE = Map.of(
@@ -99,6 +100,10 @@ public class Level {
     for (Block b : blocks) {
       root.getChildren().add(b.getSceneNode());
     }
+
+    // UI elements
+    statusDisplay = new StatusDisplay(new Vec2D(0, 0), lives, powerUp);
+    root.getChildren().add(statusDisplay.getSceneNode());
 
     // create a place to see the shapes
     return new Scene(root, Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT, background);
@@ -193,14 +198,15 @@ public class Level {
   private void checkAndHandleBallCollision(GameObject go) {
     Collision collision = Collider.checkCollision(ball.getCollider(), go.getCollider());
     if (collision != null) {
-      ball.handleCollision(collision, poweredUp);
-      go.handleCollision(collision, poweredUp);
+      ball.handleCollision(collision, powerUp);
+      go.handleCollision(collision, powerUp);
     }
   }
 
   private void checkBallAndReset() {
     if (ball.getPos().getY() + ball.getRadius() >= Main.SCREEN_HEIGHT) {
       --lives;
+      statusDisplay.setLives(lives);
       ball.reset(Main.SCREEN_WIDTH / 2.0, Main.SCREEN_HEIGHT / 2.0);
     }
     if (lives <= 0) {

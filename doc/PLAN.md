@@ -8,7 +8,6 @@
 
 # Abilities of paddle
 
-- When in power ups, the paddle should reflect the ball in a 20% larger angle of emergence than normal.
 - The paddle wraps around the edge of the screen with a penalty, it will move slower for 2 seconds after wrapping.
 
 # Types of blocks
@@ -25,7 +24,7 @@ During power ups:
 
 - The ball moves in a higher speed during power ups.
 - The ball becomes larger.
-- The paddle can wrap around the edge of the screen without movement speed penalty.
+- The paddle becomes wider.
 
 # Cheat keys
 

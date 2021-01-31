@@ -32,12 +32,15 @@ public class Ball extends GameObject {
 
     // FIXME: set velocity when user confirm game start
     v = new Vec2D(maxVelocity, -maxVelocity);
+    scaleVelocityToMax();
   }
 
   public void reset(double x, double y) {
-    v.set(maxVelocity, -maxVelocity);
     pos.set(x, y);
     ((SphereCollider) collider).setPos(pos, radius);
+
+    v.set(maxVelocity, -maxVelocity);
+    scaleVelocityToMax();
   }
 
   @Override
@@ -65,10 +68,17 @@ public class Ball extends GameObject {
 
   public void setVelocity(Vec2D v) {
     this.v = v;
+    scaleVelocityToMax();
+  }
+
+  public void setMaxVelocity(double maxVelocity) {
+    this.maxVelocity = maxVelocity;
+    scaleVelocityToMax();
+  }
+
+  private void scaleVelocityToMax() {
     double m = this.v.magnitude();
-    if (m > maxVelocity) {
-      this.v = this.v.mul(maxVelocity / m);
-    }
+    this.v = this.v.mul(maxVelocity / m);
   }
 
   public double getRadius() {

@@ -66,7 +66,7 @@ public class Level {
     });
     inputManager.registerInputHandler("3", val -> {
       if (val == 1) {
-        triggerPowerUp(PowerUpType.NO_PENALTY_WARP);
+        triggerPowerUp(PowerUpType.WIDE_PADDLE);
       }
     });
 
@@ -242,6 +242,14 @@ public class Level {
     powerUp = type;
     statusDisplay.setPowerUp(type);
     System.out.println("Powerup triggered: " + type);
+
+    // TODO: delay 5 seconds and disable powerups
+    if (type == PowerUpType.HIGH_SPEED_BALL) {
+      // FIXME: velocity being too high (about 400) will break the collision detection (CCD needed)
+      ball.setMaxVelocity(300);
+    } else if (type == PowerUpType.LARGE_BALL) {
+    } else if (type == PowerUpType.WIDE_PADDLE) {
+    }
     // TODO
   }
 

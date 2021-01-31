@@ -27,7 +27,7 @@ public class StatusDisplay {
       PowerUpType.NONE, "",
       PowerUpType.HIGH_SPEED_BALL, "extraballpower.gif",
       PowerUpType.LARGE_BALL, "sizepower.gif",
-      PowerUpType.NO_PENALTY_WARP, "paddlepower.gif"
+      PowerUpType.WIDE_PADDLE, "paddlepower.gif"
   );
 
   public StatusDisplay(Vec2D pos, int lives, PowerUpType powerUp) {

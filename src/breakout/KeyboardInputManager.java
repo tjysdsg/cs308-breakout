@@ -17,8 +17,6 @@ interface AxisHandler {
 // TODO: base InputManager class, KeyboardInputManager and MouseInputManager inherit from it
 public class KeyboardInputManager implements EventHandler<KeyEvent> {
 
-  private int hAxis = 0;
-  private int vAxis = 0;
   private Map<String, ArrayList<AxisHandler>> axisHandlers;
   private static KeyboardInputManager globalInputManager;
 
@@ -29,8 +27,11 @@ public class KeyboardInputManager implements EventHandler<KeyEvent> {
     return globalInputManager;
   }
 
+  private HashMap<String, Double> axisValues;
+
   public KeyboardInputManager() {
     axisHandlers = new HashMap<>();
+    axisValues = new HashMap<>();
   }
 
   @Override
@@ -42,40 +43,41 @@ public class KeyboardInputManager implements EventHandler<KeyEvent> {
     if (type.equals(KeyEvent.KEY_PRESSED)) {
       // horizontal axis
       if (code == KeyCode.RIGHT) {
-        setHAxis(1);
+        setAxis("Horizontal", 1);
       } else if (code == KeyCode.LEFT) {
-        setHAxis(-1);
+        setAxis("Horizontal", -1);
       }
 
       // vertical axis
       if (code == KeyCode.UP) {
-        setVAxis(1);
+        setAxis("Vertical", 1);
       } else if (code == KeyCode.DOWN) {
-        setVAxis(-1);
+        setAxis("Vertical", -1);
       }
+
+      // other axis
+      setAxis(code.getName(), 1);
     }
     // key release
     else if (type.equals(KeyEvent.KEY_RELEASED)) {
       // horizontal axis
       if (code == KeyCode.RIGHT || code == KeyCode.LEFT) {
-        setHAxis(0);
+        setAxis("Horizontal", 0);
       }
 
       // vertical axis
       if (code == KeyCode.UP || code == KeyCode.DOWN) {
-        setVAxis(0);
+        setAxis("Vertical", 0);
       }
+
+      // other axis
+      setAxis(code.getName(), 0);
     }
   }
 
-  public void setHAxis(int val) {
-    hAxis = val;
-    triggerHandler("Horizontal", hAxis);
-  }
-
-  public void setVAxis(int val) {
-    vAxis = val;
-    triggerHandler("Vertical", vAxis);
+  public void setAxis(String axis, double val) {
+    axisValues.put(axis, val);
+    triggerHandler(axis, val);
   }
 
   public void registerInputHandler(String axis, AxisHandler handler) {

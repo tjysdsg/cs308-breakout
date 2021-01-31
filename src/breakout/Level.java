@@ -46,12 +46,31 @@ public class Level {
     // setup scene
     scene = setupGame(Color.AZURE);
 
-    // register input manager
+    // register input handlers
     // TODO: detect touch screen and use a different input manager
     inputManager = KeyboardInputManager.globalInputManager();
     inputManager.registerInputHandler("Horizontal", val -> {
       paddle.translate((int) val);
     });
+
+    // handlers for triggering power ups
+    inputManager.registerInputHandler("1", val -> {
+      if (val == 1) {
+        triggerPowerUp(PowerUpType.HIGH_SPEED_BALL);
+      }
+    });
+    inputManager.registerInputHandler("2", val -> {
+      if (val == 1) {
+        triggerPowerUp(PowerUpType.LARGE_BALL);
+      }
+    });
+    inputManager.registerInputHandler("3", val -> {
+      if (val == 1) {
+        triggerPowerUp(PowerUpType.NO_PENALTY_WARP);
+      }
+    });
+
+    // register the input manager
     scene.addEventHandler(KeyEvent.ANY, inputManager);
   }
 
@@ -216,6 +235,13 @@ public class Level {
   }
 
   public void checkVictory() {
+    // TODO
+  }
+
+  public void triggerPowerUp(PowerUpType type) {
+    powerUp = type;
+    statusDisplay.setPowerUp(type);
+    System.out.println("Powerup triggered: " + type);
     // TODO
   }
 

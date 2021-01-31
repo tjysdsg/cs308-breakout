@@ -39,7 +39,9 @@ Known Bugs:
 
 Extra credit:
 
-- [stackexchange.com](https://gamedev.stackexchange.com/questions/96337/collision-between-aabb-and-circle) about
-  collision detection (though not using the methods mentioned there, my implementation was inspired by them)
+- [stackexchange.com](https://gamedev.stackexchange.com/questions/96337/collision-between-aabb-and-circle)
+  about collision detection (though not using the methods mentioned there, my implementation was
+  inspired by them)
+- [data/heart.png](https://en.wikipedia.org/wiki/Heart_symbol)
 
 ### Impressions

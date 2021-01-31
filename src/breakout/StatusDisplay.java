@@ -1,6 +1,7 @@
 package breakout;
 
 import java.util.Map;
+import java.util.Objects;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -33,22 +34,32 @@ public class StatusDisplay extends UIComponent {
   protected void buildTree() {
     // remaining lives display
     lifeCount = new Text("" + lives);
-    lifeCount.setX(pos.getX() + 20);
+    lifeCount.setX(pos.getX() + 25);
     lifeCount.setY(pos.getY() + 20);
     lifeCount.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
     lifeCount.setFill(Color.BLACK);
     lifeCount.setStroke(Color.WHITE);
     lifeCount.setStrokeWidth(1.0);
 
+    Image heartImage = new Image(Objects.requireNonNull(
+        this.getClass().getClassLoader().getResourceAsStream("heart.png")
+    ));
+    ImageView heartIcon = new ImageView(heartImage);
+    heartIcon.setX(pos.getX() + 18);
+    heartIcon.setY(pos.getY() + 3);
+    heartIcon.setFitWidth(25);
+    heartIcon.setFitHeight(25);
+
     // power up icon
     powerUpIndicator = new ImageView();
     updatePowerUpIcon();
     powerUpIndicator.setX(pos.getX() + 5);
-    powerUpIndicator.setY(pos.getY() + 5);
+    powerUpIndicator.setY(pos.getY() + 8);
     powerUpIndicator.setFitWidth(10);
     powerUpIndicator.setFitHeight(10);
 
     // add to child components
+    children.add(heartIcon);
     children.add(lifeCount);
     children.add(powerUpIndicator);
   }

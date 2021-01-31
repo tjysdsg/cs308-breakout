@@ -13,8 +13,8 @@ import javafx.util.Duration;
 public class Main extends Application {
     public static final int FRAMES_PER_SECOND = 60;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-    public static final int SCREEN_WIDTH = 400; // TODO: tell javafx to prevent window resizing
-    public static final int SCREEN_HEIGHT = 600;
+    public static final int SCREEN_WIDTH = 800; // TODO: tell javafx to prevent window resizing
+    public static final int SCREEN_HEIGHT = 400;
 
     Level level;
 

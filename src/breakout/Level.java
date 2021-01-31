@@ -101,6 +101,13 @@ public class Level {
       }
     });
 
+    // press "P" to make paddle full width
+    inputManager.registerInputHandler("P", val -> {
+      if (val == 1) {
+        paddle.setWidth(Main.SCREEN_WIDTH);
+      }
+    });
+
     // press Space to start/pause
     inputManager.registerInputHandler("Space", val -> {
       if (val == 1) {

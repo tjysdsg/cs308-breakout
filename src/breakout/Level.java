@@ -1,5 +1,8 @@
 package breakout;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Timer;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
@@ -32,7 +35,14 @@ public class Level {
   private Ball ball;
   private Paddle paddle;
   private StatusDisplay statusDisplay;
+
   private static final int BLOCK_HEIGHT = 20;
+  private static final double DEFAULT_BALL_MAX_VELOCITY = 200;
+  private static final double DEFAULT_BALL_RADIUS = 10;
+  private static final double DEFAULT_PADDLE_WIDTH = 80;
+  private static final double POWERUP_BALL_MAX_VELOCITY = 300;
+  private static final double POWERUP_BALL_RADIUS = 12;
+  private static final double POWERUP_PADDLE_WIDTH = 110;
 
   private static Map<Character, Block.BlockType> ASCII2BLOCK_TYPE = Map.of(
       '@', Block.BlockType.NORMAL,
@@ -243,16 +253,21 @@ public class Level {
     statusDisplay.setPowerUp(type);
     System.out.println("Powerup triggered: " + type);
 
-    // TODO: delay 5 seconds and disable powerups
     if (type == PowerUpType.HIGH_SPEED_BALL) {
       // FIXME: velocity being too high (about 400) will break the collision detection (CCD needed)
-      ball.setMaxVelocity(300);
+      ball.setMaxVelocity(POWERUP_BALL_MAX_VELOCITY);
     } else if (type == PowerUpType.LARGE_BALL) {
-      ball.setRadius(13);
+      ball.setRadius(POWERUP_BALL_RADIUS);
     } else if (type == PowerUpType.WIDE_PADDLE) {
-      paddle.setWidth(100);
+      paddle.setWidth(POWERUP_PADDLE_WIDTH);
+    } else if (type == PowerUpType.NONE) {
+      ball.setMaxVelocity(DEFAULT_BALL_MAX_VELOCITY);
+      ball.setRadius(DEFAULT_BALL_RADIUS);
+      paddle.setWidth(DEFAULT_PADDLE_WIDTH);
     }
-    // TODO
+    ActionListener al = arg -> triggerPowerUp(PowerUpType.NONE);
+    Timer t = new Timer(5000, al);
+    t.start();
   }
 
   public void cheat(CheatType type) {

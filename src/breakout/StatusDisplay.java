@@ -38,7 +38,7 @@ public class StatusDisplay extends UIComponent {
     lifeCount = new Text("" + lives);
     lifeCount.setX(pos.getX() + 25);
     lifeCount.setY(pos.getY() + 20);
-    lifeCount.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+    lifeCount.setFont(Font.font("Arial Black", FontWeight.BOLD, FontPosture.REGULAR, 15));
     lifeCount.setFill(Color.BLACK);
     lifeCount.setStroke(Color.WHITE);
     lifeCount.setStrokeWidth(1.0);
@@ -57,7 +57,7 @@ public class StatusDisplay extends UIComponent {
     scoreDisplay = new Text("Score: " + score);
     scoreDisplay.setX(pos.getX() + 50);
     scoreDisplay.setY(pos.getY() + 20);
-    scoreDisplay.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+    scoreDisplay.setFont(Font.font("Arial Black", FontWeight.BOLD, FontPosture.REGULAR, 15));
     scoreDisplay.setFill(Color.BLUE);
     scoreDisplay.setStroke(Color.WHITE);
     scoreDisplay.setStrokeWidth(1.0);

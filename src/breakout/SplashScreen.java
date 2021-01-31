@@ -18,7 +18,7 @@ public class SplashScreen extends UIComponent {
   @Override
   protected void buildTree() {
     textWin = new Text("YOU WON");
-    textWin.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 30));
+    textWin.setFont(Font.font("Arial Black", FontWeight.BOLD, FontPosture.REGULAR, 30));
     textWin.setFill(Color.BLUE);
     textWin.setStroke(Color.WHITE);
     textWin.setStrokeWidth(2.0);
@@ -33,7 +33,7 @@ public class SplashScreen extends UIComponent {
     }
 
     textRules = new Text(ruleString);
-    textRules.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+    textRules.setFont(Font.font("Arial Black", FontWeight.NORMAL, FontPosture.REGULAR, 15));
     centerTextOnScreen(textRules);
 
     children.add(textWin);

@@ -1,5 +1,6 @@
 package breakout;
 
+import breakout.Block.BlockType;
 import java.util.Random;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -34,6 +35,7 @@ public class Level {
   private Ball ball;
   private Paddle paddle;
   private StatusDisplay statusDisplay;
+  private boolean won = false;
 
   private static final int BLOCK_HEIGHT = 20;
   private static final double DEFAULT_BALL_MAX_VELOCITY = 200;
@@ -252,10 +254,6 @@ public class Level {
     }
   }
 
-  public void checkVictory() {
-    // TODO
-  }
-
   private void triggerRandomPowerUp() {
     // don't trigger if already in powerup
     if (powerUp != PowerUpType.NONE) {
@@ -292,5 +290,18 @@ public class Level {
   }
 
   public void cheat(CheatType type) {
+  }
+
+  public void checkVictory() {
+    won = true;
+    for (Block b : blocks) {
+      if (b.getBlockType() == BlockType.INDESTRUCTIBLE || b.getBlockType() == BlockType.REMOVE) {
+        continue;
+      }
+      won = false;
+    }
+    if (won) {
+      System.out.println("WON");
+    }
   }
 }

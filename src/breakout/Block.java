@@ -47,7 +47,7 @@ public class Block extends GameObject {
   );
 
   private BlockType type;
-  private int health;
+  public int health;
   private final Vec2D p1; // top left
   private final Vec2D p2; // bottom right
 
@@ -90,5 +90,10 @@ public class Block extends GameObject {
 
   public BlockType getBlockType() {
     return type;
+  }
+
+  public void setBlockType(BlockType type) {
+    this.type = type;
+    updateBlockImage();
   }
 }

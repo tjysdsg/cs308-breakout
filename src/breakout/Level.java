@@ -108,6 +108,18 @@ public class Level {
       }
     });
 
+    // press "F" to all fortified blocks 1 health
+    inputManager.registerInputHandler("F", val -> {
+      if (val == 1) {
+        for (Block b : blocks) {
+          if (b.getBlockType() == BlockType.FORTIFIED) {
+            b.health = 1;
+            b.setBlockType(BlockType.NORMAL);
+          }
+        }
+      }
+    });
+
     // press Space to start/pause
     inputManager.registerInputHandler("Space", val -> {
       if (val == 1) {

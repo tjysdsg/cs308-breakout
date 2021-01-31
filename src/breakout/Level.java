@@ -73,10 +73,18 @@ public class Level {
       paddle.translate((int) val);
     });
 
+    // press "L" to add one extra life
     inputManager.registerInputHandler("L", val -> {
       if (val == 1) {
         ++lives;
         statusDisplay.setLives(lives);
+      }
+    });
+
+    // press "R" to reset the level
+    inputManager.registerInputHandler("R", val -> {
+      if (val == 1) {
+        resetLevel();
       }
     });
   }
@@ -94,7 +102,7 @@ public class Level {
     ball = new Ball(screen_half_width, screen_half_height);
 
     // init paddle
-    paddle = new Paddle(screen_half_width, Main.SCREEN_HEIGHT - 20);
+    paddle = new Paddle();
 
     // init 4 blocks at screen edges
     blocks = new ArrayList<>();
@@ -254,12 +262,18 @@ public class Level {
     if (ball.getPos().getY() + ball.getRadius() >= Main.SCREEN_HEIGHT) {
       --lives;
       statusDisplay.setLives(lives);
-      ball.reset(Main.SCREEN_WIDTH / 2.0, Main.SCREEN_HEIGHT / 2.0);
+      resetLevel();
     }
     if (lives <= 0) {
       // TODO: tell user no lives left
       System.out.println("You're dead");
     }
+  }
+
+  private void resetLevel() {
+    ball.reset(Main.SCREEN_WIDTH / 2.0, Main.SCREEN_HEIGHT / 2.0);
+    paddle.reset();
+    triggerPowerUp(PowerUpType.NONE);
   }
 
   private void triggerRandomPowerUp() {

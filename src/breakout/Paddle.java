@@ -8,24 +8,32 @@ import java.util.Objects;
 public class Paddle extends GameObject {
 
   private double width = 80;
-  private double height = 10;
-  private double velocity = 250;
+  private final double height = 10;
+  private final double velocity = 250;
   private int dir = 0;
   private static final String IMAGE = "paddle.gif";
 
-  public Paddle(double x, double y) {
+  public Paddle() {
     Image image = new Image(Objects.requireNonNull(
         this.getClass().getClassLoader().getResourceAsStream(IMAGE)
     ));
     sceneNode = new ImageView(image);
     sceneNode.setFitWidth(width);
     sceneNode.setFitHeight(height);
-    pos = new Vec2D(x, y);
+
+    pos = new Vec2D(0, 0);
     collider = new PaddleCollider(pos, pos.add(new Vec2D(width, height)));
+    reset();
   }
 
   public void translate(int dir /* -1 left, 1 right */) {
     this.dir = dir;
+  }
+
+  public void reset() {
+    pos.set((Main.SCREEN_WIDTH - width) / 2.0, Main.SCREEN_HEIGHT - 20);
+    ((PaddleCollider) collider).setPos(pos, pos.add(new Vec2D(width, height)));
+    dir = 0;
   }
 
   public void setWidth(double width) {

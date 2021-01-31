@@ -9,7 +9,7 @@ public class Paddle extends GameObject {
 
   private double width = 80;
   private double height = 10;
-  private double velocity = 200; // TODO: calculate real velocity (in pixels) according to screen width
+  private double velocity = 200;
   private int dir = 0;
   private static final String IMAGE = "paddle.gif";
 
@@ -26,6 +26,12 @@ public class Paddle extends GameObject {
 
   public void translate(int dir /* -1 left, 1 right */) {
     this.dir = dir;
+  }
+
+  public void setWidth(double width) {
+    this.width = width;
+    ((PaddleCollider) collider).setPos(pos, pos.add(new Vec2D(width, height)));
+    sceneNode.setFitWidth(width);
   }
 
   @Override

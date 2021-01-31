@@ -250,6 +250,7 @@ public class Level {
     } else if (type == PowerUpType.LARGE_BALL) {
       ball.setRadius(13);
     } else if (type == PowerUpType.WIDE_PADDLE) {
+      paddle.setWidth(100);
     }
     // TODO
   }

@@ -1,8 +1,6 @@
 package breakout;
 
 import java.util.Map;
-import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -11,15 +9,10 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-/**
- * Update only when necessary, so no `step()` method
- */
-public class StatusDisplay {
+public class StatusDisplay extends UIComponent {
 
-  public Vec2D pos;
   private int lives;
   private PowerUpType powerUp;
-  private Group sceneNode;
   private Text lifeCount;
   private ImageView powerUpIndicator;
 
@@ -31,10 +24,13 @@ public class StatusDisplay {
   );
 
   public StatusDisplay(Vec2D pos, int lives, PowerUpType powerUp) {
-    this.pos = pos;
+    super(pos);
     this.lives = lives;
     this.powerUp = powerUp;
+  }
 
+  @Override
+  protected void buildTree() {
     // remaining lives display
     lifeCount = new Text("" + lives);
     lifeCount.setX(pos.getX() + 20);
@@ -52,17 +48,9 @@ public class StatusDisplay {
     powerUpIndicator.setFitWidth(10);
     powerUpIndicator.setFitHeight(10);
 
-    // combine elements
-    sceneNode = new Group();
-    sceneNode.getChildren().add(powerUpIndicator);
-    sceneNode.getChildren().add(lifeCount);
-
-    // move UI nodes to the front
-    sceneNode.setViewOrder(-1000);
-  }
-
-  public Node getSceneNode() {
-    return sceneNode;
+    // add to child components
+    children.add(lifeCount);
+    children.add(powerUpIndicator);
   }
 
   public void setLives(int lives) {

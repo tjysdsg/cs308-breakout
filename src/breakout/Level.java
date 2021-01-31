@@ -133,6 +133,7 @@ public class Level {
 
     // UI elements
     statusDisplay = new StatusDisplay(new Vec2D(0, 0), lives, powerUp);
+    statusDisplay.init();
     root.getChildren().add(statusDisplay.getSceneNode());
 
     // create a place to see the shapes

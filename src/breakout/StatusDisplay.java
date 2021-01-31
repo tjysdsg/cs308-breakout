@@ -84,7 +84,7 @@ public class StatusDisplay extends UIComponent {
 
   public void setScore(int score) {
     this.score = score;
-    scoreDisplay.setText("Score: " + lives);
+    scoreDisplay.setText("Score: " + score);
   }
 
   private void updatePowerUpIcon() {

@@ -26,7 +26,7 @@ public class Block extends GameObject {
       Block.BlockType.MOVING, 2
   );
 
-  public int score;
+  public final int score;
 
   private static final Map<BlockType, String> IMAGE = Map.of(
       BlockType.NORMAL, "brick2.gif",
@@ -54,9 +54,9 @@ public class Block extends GameObject {
   public Block(BlockType type, Vec2D p1, Vec2D p2) {
     this.type = type;
     this.health = HEALTH.get(this.type);
+    this.score = BLOCK_SCORE.get(this.type);
     this.p1 = p1;
     this.p2 = p2;
-    this.score = BLOCK_SCORE.get(this.type);
 
     // init image
     sceneNode = new ImageView();

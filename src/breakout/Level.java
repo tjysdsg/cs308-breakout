@@ -229,7 +229,8 @@ public class Level {
     // remove blocks that are marked for removal
     blocksForRemoval.sort(Collections.reverseOrder());
     for (int idx : blocksForRemoval) {
-      score += blocks.get(idx).score; // increment score
+      // increment score
+      score += blocks.get(idx).score;
       statusDisplay.setScore(score);
 
       // remove from list and from scene

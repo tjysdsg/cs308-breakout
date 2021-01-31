@@ -97,7 +97,6 @@ public class Level {
     // press "W" to win this level
     inputManager.registerInputHandler("W", val -> {
       if (val == 1) {
-        won = true;
         winGame(true);
       }
     });
@@ -107,13 +106,31 @@ public class Level {
       if (val == 1) {
         if (won) {
           System.out.println("Loading the next level...");
-          loadNextLevel();
-          splashScreen.setShowRules(true);
-          splashScreen.setShowWin(false);
           won = false;
+          loadNextLevel();
         } else {
           pauseGame(!paused);
         }
+      }
+    });
+
+    // press 1 to 3 to load relevant level
+    inputManager.registerInputHandler("1", val -> {
+      if (val == 1) {
+        won = false;
+        loadLevel(1);
+      }
+    });
+    inputManager.registerInputHandler("2", val -> {
+      if (val == 1) {
+        won = false;
+        loadLevel(2);
+      }
+    });
+    inputManager.registerInputHandler("3", val -> {
+      if (val == 1) {
+        won = false;
+        loadLevel(3);
       }
     });
   }
@@ -170,8 +187,6 @@ public class Level {
 
     splashScreen = new SplashScreen();
     splashScreen.init();
-    splashScreen.setShowRules(true);
-    splashScreen.setShowWin(false);
 
     // setup scene tree
     uiRoot.getChildren().add(statusDisplay.getSceneNode());
@@ -345,14 +360,29 @@ public class Level {
     paused = pause;
     if (paused) {
       gameRoot.setEffect(new GaussianBlur());
+      if (won) {
+        splashScreen.setShowRules(false);
+        splashScreen.setShowWin(true);
+      } else {
+        splashScreen.setShowRules(true);
+        splashScreen.setShowWin(false);
+      }
     } else {
+      splashScreen.setShowRules(false);
+      splashScreen.setShowWin(false);
       gameRoot.setEffect(null);
     }
   }
 
-  private void loadNextLevel() {
-    fromLevelFile("level" + (++levelIdx) + ".txt");
+  private void loadLevel(int idx) {
+    pauseGame(true);
+    levelIdx = idx;
+    fromLevelFile("level" + levelIdx + ".txt");
     statusDisplay.setLevelIdx(levelIdx);
+  }
+
+  private void loadNextLevel() {
+    loadLevel(levelIdx + 1);
   }
 
   public void checkVictory() {
@@ -368,13 +398,8 @@ public class Level {
 
   private void winGame(boolean won) {
     if (won) {
-      splashScreen.setShowRules(false);
-      splashScreen.setShowWin(true);
+      this.won = true;
       pauseGame(true);
-    } else {
-      splashScreen.setShowRules(false);
-      splashScreen.setShowWin(false);
-      pauseGame(false);
     }
   }
 }

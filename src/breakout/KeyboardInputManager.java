@@ -17,7 +17,7 @@ interface AxisHandler {
 // TODO: base InputManager class, KeyboardInputManager and MouseInputManager inherit from it
 public class KeyboardInputManager implements EventHandler<KeyEvent> {
 
-  private Map<String, ArrayList<AxisHandler>> axisHandlers;
+  private final Map<String, ArrayList<AxisHandler>> axisHandlers;
   private static KeyboardInputManager globalInputManager;
 
   public static KeyboardInputManager globalInputManager() {
@@ -27,7 +27,7 @@ public class KeyboardInputManager implements EventHandler<KeyEvent> {
     return globalInputManager;
   }
 
-  private HashMap<String, Double> axisValues;
+  private final HashMap<String, Double> axisValues;
 
   public KeyboardInputManager() {
     axisHandlers = new HashMap<>();

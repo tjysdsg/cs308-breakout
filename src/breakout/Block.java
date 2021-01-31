@@ -48,8 +48,8 @@ public class Block extends GameObject {
 
   private BlockType type;
   private int health;
-  private Vec2D p1; // top left
-  private Vec2D p2; // bottom right
+  private final Vec2D p1; // top left
+  private final Vec2D p2; // bottom right
 
   public Block(BlockType type, Vec2D p1, Vec2D p2) {
     this.type = type;

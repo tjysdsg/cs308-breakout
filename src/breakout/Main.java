@@ -6,10 +6,6 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-
-/**
- * TODO
- */
 public class Main extends Application {
 
   public static final int FRAMES_PER_SECOND = 60;

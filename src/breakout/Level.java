@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,16 +21,16 @@ public class Level {
     ONE_HIT_FORTIFIED,
   }
 
-  private Scene scene;
-  private Group root;
-  private Group gameRoot; // parent node of game elements
-  private Group uiRoot; // parent node of UI elements
+  private final Scene scene;
+  private final Group root;
+  private final Group gameRoot; // parent node of game elements
+  private final Group uiRoot; // parent node of UI elements
   private String levelName = "Breakout";
-  private KeyboardInputManager inputManager;
+  private final KeyboardInputManager inputManager;
   private PowerUpType powerUp = PowerUpType.NONE;
   private double powerUpTime = 0;
   private int lives = 3;
-  private ArrayList<Block> blocks;
+  private final ArrayList<Block> blocks;
   private Ball ball;
   private Paddle paddle;
   private StatusDisplay statusDisplay;

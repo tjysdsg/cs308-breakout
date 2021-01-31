@@ -14,9 +14,11 @@ public class StatusDisplay extends UIComponent {
 
   private int lives;
   private int score = 0;
+  private int levelIdx;
   private PowerUpType powerUp;
   private Text lifeCount;
   private Text scoreDisplay;
+  private Text levelDisplay;
   private ImageView powerUpIndicator;
 
   private static final Map<PowerUpType, String> powerUpIcons = Map.of(
@@ -26,18 +28,19 @@ public class StatusDisplay extends UIComponent {
       PowerUpType.WIDE_PADDLE, "paddlepower.gif"
   );
 
-  public StatusDisplay(Vec2D pos, int lives, PowerUpType powerUp) {
-    super(pos);
+  public StatusDisplay(int lives, PowerUpType powerUp, int levelIdx) {
+    super();
     this.lives = lives;
     this.powerUp = powerUp;
+    this.levelIdx = levelIdx;
   }
 
   @Override
   protected void buildTree() {
     // remaining lives display
     lifeCount = new Text("" + lives);
-    lifeCount.setX(pos.getX() + 25);
-    lifeCount.setY(pos.getY() + 20);
+    lifeCount.setX(25);
+    lifeCount.setY(20);
     lifeCount.setFont(Font.font("Arial Black", FontWeight.BOLD, FontPosture.REGULAR, 15));
     lifeCount.setFill(Color.BLACK);
     lifeCount.setStroke(Color.WHITE);
@@ -48,15 +51,15 @@ public class StatusDisplay extends UIComponent {
         this.getClass().getClassLoader().getResourceAsStream("heart.png")
     ));
     ImageView heartIcon = new ImageView(heartImage);
-    heartIcon.setX(pos.getX() + 18);
-    heartIcon.setY(pos.getY() + 3);
+    heartIcon.setX(18);
+    heartIcon.setY(3);
     heartIcon.setFitWidth(25);
     heartIcon.setFitHeight(25);
 
     // score display
     scoreDisplay = new Text("Score: " + score);
-    scoreDisplay.setX(pos.getX() + 50);
-    scoreDisplay.setY(pos.getY() + 20);
+    scoreDisplay.setX(50);
+    scoreDisplay.setY(20);
     scoreDisplay.setFont(Font.font("Arial Black", FontWeight.BOLD, FontPosture.REGULAR, 15));
     scoreDisplay.setFill(Color.BLUE);
     scoreDisplay.setStroke(Color.WHITE);
@@ -65,21 +68,36 @@ public class StatusDisplay extends UIComponent {
     // power up icon
     powerUpIndicator = new ImageView();
     updatePowerUpIcon();
-    powerUpIndicator.setX(pos.getX() + 5);
-    powerUpIndicator.setY(pos.getY() + 8);
+    powerUpIndicator.setX(5);
+    powerUpIndicator.setY(8);
     powerUpIndicator.setFitWidth(10);
     powerUpIndicator.setFitHeight(10);
+
+    // level display
+    levelDisplay = new Text("Level " + levelIdx);
+    levelDisplay.setX(Main.SCREEN_WIDTH - 100);
+    levelDisplay.setY(20);
+    levelDisplay.setFont(Font.font("Arial Black", FontWeight.BOLD, FontPosture.REGULAR, 15));
+    levelDisplay.setFill(Color.GREEN);
+    levelDisplay.setStroke(Color.WHITE);
+    levelDisplay.setStrokeWidth(1.0);
 
     // add to child components
     children.add(heartIcon);
     children.add(lifeCount);
     children.add(scoreDisplay);
+    children.add(levelDisplay);
     children.add(powerUpIndicator);
   }
 
   public void setLives(int lives) {
     this.lives = lives;
     lifeCount.setText("" + lives);
+  }
+
+  public void setLevelIdx(int levelIdx) {
+    this.levelIdx = levelIdx;
+    levelDisplay.setText("Level " + levelIdx);
   }
 
   public void setScore(int score) {

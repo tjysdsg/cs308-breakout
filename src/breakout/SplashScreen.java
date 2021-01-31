@@ -12,7 +12,7 @@ public class SplashScreen extends UIComponent {
   private Text textRules;
 
   public SplashScreen() {
-    super(new Vec2D(0, 0));
+    super();
   }
 
   @Override

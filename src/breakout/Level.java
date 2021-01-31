@@ -165,7 +165,7 @@ public class Level {
 
   private void setupUI() {
     // UI elements
-    statusDisplay = new StatusDisplay(new Vec2D(0, 0), lives, powerUp);
+    statusDisplay = new StatusDisplay(lives, powerUp, levelIdx);
     statusDisplay.init();
 
     splashScreen = new SplashScreen();
@@ -352,6 +352,7 @@ public class Level {
 
   private void loadNextLevel() {
     fromLevelFile("level" + (++levelIdx) + ".txt");
+    statusDisplay.setLevelIdx(levelIdx);
   }
 
   public void checkVictory() {

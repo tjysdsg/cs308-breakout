@@ -59,8 +59,8 @@ public class Level {
         root = new Group();
 
         // x and y represent the top left corner, so center it in window
-        double screen_half_width = (double) Main.SCREEN_WIDTH / 2;
-        double screen_half_height = (double) Main.SCREEN_HEIGHT / 2;
+        double screen_half_width = Main.SCREEN_WIDTH / 2.0;
+        double screen_half_height = Main.SCREEN_HEIGHT / 2.0;
 
         // init ball
         ball = new Ball(screen_half_width, screen_half_height);
@@ -181,6 +181,12 @@ public class Level {
             root.getChildren().remove(blocks.get(idx).getSceneNode());
             blocks.remove(idx);
         }
+
+        // check if ball is outside
+        checkBallAndReset();
+
+        // check if all (non-indestructible) blocks are cleared
+        checkVictory();
     }
 
     private void checkAndHandleBallCollision(GameObject go) {
@@ -191,7 +197,19 @@ public class Level {
         }
     }
 
+    private void checkBallAndReset() {
+        if (ball.getPos().getY() + ball.getRadius() >= Main.SCREEN_HEIGHT) {
+            --lives;
+            ball.reset(Main.SCREEN_WIDTH / 2.0, Main.SCREEN_HEIGHT / 2.0);
+        }
+        if (lives <= 0) {
+            // TODO: tell user no lives left
+            System.out.println("You're dead");
+        }
+    }
+
     public void checkVictory() {
+        // TODO
     }
 
     public void cheat(CheatType type) {

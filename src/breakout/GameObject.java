@@ -19,6 +19,10 @@ public class GameObject {
     public void step(double time) {
     }
 
+    public Vec2D getPos() {
+        return pos;
+    }
+
     public void setPos(Vec2D pos) {
         this.pos = pos;
     }

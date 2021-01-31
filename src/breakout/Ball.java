@@ -32,6 +32,12 @@ public class Ball extends GameObject {
         v = new Vec2D(maxVelocity, -maxVelocity);
     }
 
+    public void reset(double x, double y) {
+        v.set(maxVelocity, -maxVelocity);
+        pos.set(x, y);
+        ((SphereCollider) collider).setPos(pos, radius);
+    }
+
     @Override
     public void step(double time) {
         pos = pos.add(v.mul(time));

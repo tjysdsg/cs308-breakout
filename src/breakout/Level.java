@@ -60,32 +60,25 @@ public class Level {
     // setup scene
     scene = setupGame(Color.AZURE);
 
-    // register input handlers
     // TODO: detect touch screen and use a different input manager
     inputManager = KeyboardInputManager.globalInputManager();
+    // register input handlers
+    registerInputHandlers();
+    // register the input manager
+    scene.addEventHandler(KeyEvent.ANY, inputManager);
+  }
+
+  private void registerInputHandlers() {
     inputManager.registerInputHandler("Horizontal", val -> {
       paddle.translate((int) val);
     });
 
-    // handlers for triggering power ups
-    inputManager.registerInputHandler("1", val -> {
+    inputManager.registerInputHandler("L", val -> {
       if (val == 1) {
-        triggerPowerUp(PowerUpType.HIGH_SPEED_BALL);
+        ++lives;
+        statusDisplay.setLives(lives);
       }
     });
-    inputManager.registerInputHandler("2", val -> {
-      if (val == 1) {
-        triggerPowerUp(PowerUpType.LARGE_BALL);
-      }
-    });
-    inputManager.registerInputHandler("3", val -> {
-      if (val == 1) {
-        triggerPowerUp(PowerUpType.WIDE_PADDLE);
-      }
-    });
-
-    // register the input manager
-    scene.addEventHandler(KeyEvent.ANY, inputManager);
   }
 
   // Create the game's "scene": what shapes will be in the game and their starting properties

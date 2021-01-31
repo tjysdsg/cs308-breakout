@@ -154,22 +154,12 @@ public class Level {
   public static Level fromLevelFile(String filename) {
     Level ret = new Level();
 
-    // read level file to String
-    // https://stackoverflow.com/a/46613809/7730917
-    ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-    InputStream is = classLoader.getResourceAsStream(filename);
-    if (is == null) {
+    String[] lines = Util.readResourceTxtToLines(filename);
+    if (lines == null) {
       System.err.println("WARNING: Cannot read level file: " + filename);
       return ret;
     }
-    InputStreamReader isr = new InputStreamReader(is);
-    BufferedReader reader = new BufferedReader(isr);
 
-    // String levelString = reader.lines().collect(Collectors.joining(System.lineSeparator()));
-    // System.out.println(levelString);
-
-    // create and add blocks
-    String[] lines = reader.lines().toArray(String[]::new);
     int nCols = lines[0].length();
     int blockWidth = Main.SCREEN_WIDTH / nCols;
 

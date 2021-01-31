@@ -43,5 +43,7 @@ Extra credit:
   about collision detection (though not using the methods mentioned there, my implementation was
   inspired by them)
 - [data/heart.png](https://en.wikipedia.org/wiki/Heart_symbol)
+- [rules.txt](data/rules.txt) is modified based
+  on [this](https://en.wikipedia.org/wiki/Breakout_(video_game))
 
 ### Impressions

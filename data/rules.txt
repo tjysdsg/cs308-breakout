@@ -1,0 +1,12 @@
+Rules:
+- There are many bricks on the screen and your goal is to
+destroy them all.
+- A ball moves straight around the screen, bouncing off the
+top and two sides of the screen.
+- When a brick is hit, the ball bounces back and the brick
+is destroyed. Some bricks requires two hit to be destroyed,
+and some cannot be destroyed.
+- You lose one life when the ball touches the bottom of the
+screen, if you have 0 life left, you lose the game.
+- There is also a horizontally movable paddle that you can
+use to bounce the ball upward, keeping it in play.

@@ -1,7 +1,6 @@
 package breakout;
 
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -25,7 +24,15 @@ public class SplashScreen extends UIComponent {
     textWin.setStrokeWidth(2.0);
     centerTextOnScreen(textWin);
 
-    textRules = new Text("Rules:\n"); // TODO: Rules
+    String[] ruleLines = Util.readResourceTxtToLines("rules.txt");
+    String ruleString = "";
+    if (ruleLines == null) {
+      System.err.println("WARNING: Cannot read rules.txt");
+    } else {
+      ruleString = String.join("\n", ruleLines);
+    }
+
+    textRules = new Text(ruleString);
     textRules.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
     centerTextOnScreen(textRules);
 

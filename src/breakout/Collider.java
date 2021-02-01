@@ -2,6 +2,9 @@ package breakout;
 
 import java.util.HashMap;
 
+/**
+ * Base class of all colliders
+ */
 public class Collider {
 
   /**
@@ -14,6 +17,16 @@ public class Collider {
     collided = new HashMap<>();
   }
 
+  /**
+   * Check if two colliders collide
+   *
+   * @param a: the first collider
+   * @param b: the second collider
+   * @return information about the collision
+   * <p>
+   * NOTE: `Collision.pos` collision position on surface of `a` `Collision.normal` normal vector
+   * pointing outwards from the surface of `a`, has a magnitude of 1
+   */
   public static Collision checkCollision(Collider a, Collider b) {
     if (a == null || b == null) {
       return null;
@@ -35,7 +48,9 @@ public class Collider {
    *
    * @param c1 The first collider
    * @param c2 The second collider
-   * @return `Collision.pos` collision position on surface of `a` `Collision.normal` normal vector
+   * @return information about the collision
+   * <p>
+   * NOTE: `Collision.pos` collision position on surface of `a` `Collision.normal` normal vector
    * pointing outwards from the surface of `a`, has a magnitude of 1
    */
   public static Collision sphereAndSphere(SphereCollider c1, SphereCollider c2) {
@@ -63,13 +78,17 @@ public class Collider {
   }
 
   /**
-   * Checks collision between a sphere collider and a block collider NOTE: not considering the case
-   * where the center of rectangle is inside the sphere TODO: Continuous Collision Detection is
-   * probably needed when powered up (ball is moving fast)
+   * Checks collision between a sphere collider and a block collider
+   * <p>
+   * FIXME: Not considering the case where the center of rectangle is inside the sphere
+   * <p>
+   * TODO: Continuous Collision Detection
    *
    * @param c2 The first collider
    * @param c1 The second collider
-   * @return `Collision.pos` collision position on surface of `a` `Collision.normal` normal vector
+   * @return information about the collision
+   * <p>
+   * NOTE: `Collision.pos` collision position on surface of `a` `Collision.normal` normal vector
    * pointing outwards from the surface of `a`, has a magnitude of 1
    */
   public static Collision blockAndSphere(BlockCollider c1, SphereCollider c2) {

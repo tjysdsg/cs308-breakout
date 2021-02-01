@@ -5,7 +5,9 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 
 /**
- * UI components are updated only when necessary, so no `step()` method
+ * Base class of all UI components.
+ * <p>
+ * NOTE: UI components are updated only when necessary, so no `step()` method
  */
 public class UIComponent {
 
@@ -17,6 +19,9 @@ public class UIComponent {
     sceneNode = new Group();
   }
 
+  /**
+   * Init the UI, must be called right after the constructor
+   */
   public final void init() {
     // build subcomponents (used in subclass)
     buildTree();
@@ -27,9 +32,15 @@ public class UIComponent {
     }
   }
 
+  /**
+   * Build the scene tree
+   */
   protected void buildTree() {
   }
 
+  /**
+   * @see GameObject#getSceneNode
+   */
   public Node getSceneNode() {
     return sceneNode;
   }

@@ -1,5 +1,8 @@
 package breakout;
 
+/**
+ * Containing information about a collision
+ */
 public class Collision {
 
   public Vec2D pos;

@@ -9,17 +9,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type specification of a callback used for custom input event handling
+ */
 interface AxisHandler {
 
   void handle(double val);
 }
 
-// TODO: base InputManager class, KeyboardInputManager and MouseInputManager inherit from it
+/**
+ * Keyboard input events handling and dispatch
+ */
 public class KeyboardInputManager implements EventHandler<KeyEvent> {
 
   private final Map<String, ArrayList<AxisHandler>> axisHandlers;
   private static KeyboardInputManager globalInputManager;
 
+  /**
+   * Get the global input manager that is used across the game
+   */
   public static KeyboardInputManager globalInputManager() {
     if (globalInputManager == null) {
       globalInputManager = new KeyboardInputManager();
@@ -34,6 +42,9 @@ public class KeyboardInputManager implements EventHandler<KeyEvent> {
     axisValues = new HashMap<>();
   }
 
+  /**
+   * Handles keyboard events and dispatch to registered handlers
+   */
   @Override
   public void handle(KeyEvent event) {
     KeyCode code = event.getCode();
@@ -75,11 +86,22 @@ public class KeyboardInputManager implements EventHandler<KeyEvent> {
     }
   }
 
+  /**
+   * Set the value of an axis, and trigger registered callbacks
+   *
+   * @param axis: Axis name, such as "F", "Horizontal", "Space", etc.
+   * @param val:  1 means pressed, 0 means released
+   */
   public void setAxis(String axis, double val) {
     axisValues.put(axis, val);
     triggerHandler(axis, val);
   }
 
+  /**
+   * Register a callback, the callback will be called when there is an event of an axis
+   *
+   * @see AxisHandler
+   */
   public void registerInputHandler(String axis, AxisHandler handler) {
     // FIXME: two queries
     if (axisHandlers.containsKey(axis)) {

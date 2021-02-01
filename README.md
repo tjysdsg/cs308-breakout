@@ -8,9 +8,9 @@ Name: Jiyang Tang
 
 Start Date: 01/30/2021
 
-Finish Date:
+Finish Date: 02/01/2021
 
-Hours Spent: 16
+Hours Spent: 20
 
 ### Resources Used
 

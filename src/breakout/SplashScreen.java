@@ -6,6 +6,9 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
+/**
+ * UI that spans the whole screen and blur out game components for easier reading
+ */
 public class SplashScreen extends UIComponent {
 
   private Text textWin;
@@ -15,6 +18,9 @@ public class SplashScreen extends UIComponent {
     super();
   }
 
+  /**
+   * @see UIComponent#buildTree
+   */
   @Override
   protected void buildTree() {
     textWin = new Text("YOU WON\nPress Space to load next level");
@@ -40,10 +46,16 @@ public class SplashScreen extends UIComponent {
     children.add(textRules);
   }
 
+  /**
+   * Set whether to show winning text
+   */
   public void setShowWin(boolean showWin) {
     textWin.setVisible(showWin);
   }
 
+  /**
+   * Set whether to show rules
+   */
   public void setShowRules(boolean showRules) {
     textRules.setVisible(showRules);
   }

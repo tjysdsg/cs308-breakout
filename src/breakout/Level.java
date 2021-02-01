@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
+/**
+ * Level loading, store states of the current level, interaction between components
+ */
 public class Level {
 
   private enum CheatType {
@@ -199,6 +202,9 @@ public class Level {
     pauseGame(true);
   }
 
+  /**
+   * Setup UI components
+   */
   private void setupUI() {
     // UI elements
     statusDisplay = new StatusDisplay(lives, powerUp, levelIdx);
@@ -218,6 +224,11 @@ public class Level {
     uiRoot.setViewOrder(-1000);
   }
 
+  /**
+   * Setup the level according to a level file
+   *
+   * @param filename: filename relative to the Java resource folder
+   */
   public void fromLevelFile(String filename) {
     blocks.clear();
     gameRoot.getChildren().clear();
@@ -253,6 +264,9 @@ public class Level {
     }
   }
 
+  /**
+   * Get the javafx Scene object of the current level
+   */
   public Scene getScene() {
     return scene;
   }
@@ -261,6 +275,9 @@ public class Level {
     return levelName;
   }
 
+  /**
+   * Step function called per frame to update the game
+   */
   public void step(double time) {
     if (!paused) {
       powerUpTime += time;
@@ -358,13 +375,13 @@ public class Level {
 
     if (type == PowerUpType.HIGH_SPEED_BALL) {
       // FIXME: velocity being too high (about 400) will break the collision detection (CCD needed)
-      ball.setMaxVelocity(POWERUP_BALL_MAX_VELOCITY);
+      ball.setMaxSpeed(POWERUP_BALL_MAX_VELOCITY);
     } else if (type == PowerUpType.LARGE_BALL) {
       ball.setRadius(POWERUP_BALL_RADIUS);
     } else if (type == PowerUpType.WIDE_PADDLE) {
       paddle.setWidth(POWERUP_PADDLE_WIDTH);
     } else if (type == PowerUpType.NONE) {
-      ball.setMaxVelocity(DEFAULT_BALL_MAX_VELOCITY);
+      ball.setMaxSpeed(DEFAULT_BALL_MAX_VELOCITY);
       ball.setRadius(DEFAULT_BALL_RADIUS);
       paddle.setWidth(DEFAULT_PADDLE_WIDTH);
     }
@@ -372,9 +389,11 @@ public class Level {
     powerUpTime = 0;
   }
 
-  public void cheat(CheatType type) {
-  }
-
+  /**
+   * Pause the game and show rules/wining text, or unpause the game
+   *
+   * @param pause: pause or not
+   */
   public void pauseGame(boolean pause) {
     paused = pause;
     if (paused) {
@@ -404,6 +423,9 @@ public class Level {
     loadLevel(levelIdx + 1);
   }
 
+  /**
+   * Check if the current level is won, pause the game if won
+   */
   public void checkVictory() {
     won = true;
     for (Block b : blocks) {

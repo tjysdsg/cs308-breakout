@@ -6,8 +6,9 @@ import javafx.scene.image.ImageView;
 import java.util.Objects;
 
 /**
- * NOTE: pos is the center of the ball, while the coordinate of ImageView is the top left corner of
- * the image
+ * Represents the ball
+ * <p>
+ * NOTE: pos is the center of the ball
  */
 public class Ball extends GameObject {
 
@@ -35,6 +36,9 @@ public class Ball extends GameObject {
     scaleVelocityToMax();
   }
 
+  /**
+   * Reset the ball's position and velocity
+   */
   public void reset(double x, double y) {
     pos.set(x, y);
     ((SphereCollider) collider).setPos(pos, radius);
@@ -43,6 +47,9 @@ public class Ball extends GameObject {
     scaleVelocityToMax();
   }
 
+  /**
+   * @see GameObject#step
+   */
   @Override
   public void step(double time) {
     pos = pos.add(v.mul(time));
@@ -51,6 +58,9 @@ public class Ball extends GameObject {
     sceneNode.setY(pos.getY() - radius);
   }
 
+  /**
+   * @see GameObject#handleCollision
+   */
   @Override
   public void handleCollision(Collision collision) {
     Vec2D normal = collision.normal;
@@ -62,20 +72,29 @@ public class Ball extends GameObject {
     setVelocity(out);
   }
 
-  public Vec2D getVelocity() {
-    return v;
-  }
-
+  /**
+   * Set the velocity of the ball
+   * <p>
+   * NOTE: the velocity is automatically scaled to have the max speed
+   */
   public void setVelocity(Vec2D v) {
     this.v = v;
     scaleVelocityToMax();
   }
 
-  public void setMaxVelocity(double maxVelocity) {
-    this.maxVelocity = maxVelocity;
+  /**
+   * Set the max speed of the ball
+   * <p>
+   * NOTE: the current velocity is then updated to have the max speed
+   */
+  public void setMaxSpeed(double maxSpeed) {
+    this.maxVelocity = maxSpeed;
     scaleVelocityToMax();
   }
 
+  /**
+   * Set the radius of the ball
+   */
   public void setRadius(double radius) {
     this.radius = radius;
     ((SphereCollider) this.collider).setPos(pos, this.radius);
@@ -88,6 +107,9 @@ public class Ball extends GameObject {
     this.v = this.v.mul(maxVelocity / m);
   }
 
+  /**
+   * Get the radius of the ball
+   */
   public double getRadius() {
     return radius;
   }

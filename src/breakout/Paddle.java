@@ -5,6 +5,9 @@ import javafx.scene.image.ImageView;
 
 import java.util.Objects;
 
+/**
+ * Represents the paddle
+ */
 public class Paddle extends GameObject {
 
   private double width = 80;
@@ -26,22 +29,36 @@ public class Paddle extends GameObject {
     reset();
   }
 
-  public void translate(int dir /* -1 left, 1 right */) {
+  /**
+   * Change the moving direction of the paddle
+   *
+   * @param dir: -1 left, 1 right, 0 stop moving
+   */
+  public void translate(int dir) {
     this.dir = dir;
   }
 
+  /**
+   * Reset the paddle to the bottom middle of the screen
+   */
   public void reset() {
     pos.set((Main.SCREEN_WIDTH - width) / 2.0, Main.SCREEN_HEIGHT - 20);
     ((PaddleCollider) collider).setPos(pos, pos.add(new Vec2D(width, height)));
     dir = 0;
   }
 
+  /**
+   * Set the width of the paddle
+   */
   public void setWidth(double width) {
     this.width = width;
     ((PaddleCollider) collider).setPos(pos, pos.add(new Vec2D(width, height)));
     sceneNode.setFitWidth(width);
   }
 
+  /**
+   * @see GameObject#step
+   */
   @Override
   public void step(double time) {
     pos = pos.add(new Vec2D(dir * velocity * time, 0));

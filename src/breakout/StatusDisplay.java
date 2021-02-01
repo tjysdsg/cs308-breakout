@@ -10,6 +10,9 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
+/**
+ * UI responsible for displaying game status
+ */
 public class StatusDisplay extends UIComponent {
 
   private int lives;
@@ -35,6 +38,9 @@ public class StatusDisplay extends UIComponent {
     this.levelIdx = levelIdx;
   }
 
+  /**
+   * @see UIComponent#buildTree
+   */
   @Override
   protected void buildTree() {
     // remaining lives display
@@ -90,16 +96,25 @@ public class StatusDisplay extends UIComponent {
     children.add(powerUpIndicator);
   }
 
+  /**
+   * Set how many lives left
+   */
   public void setLives(int lives) {
     this.lives = lives;
     lifeCount.setText("" + lives);
   }
 
+  /**
+   * Set the current level index
+   */
   public void setLevelIdx(int levelIdx) {
     this.levelIdx = levelIdx;
     levelDisplay.setText("Level " + levelIdx);
   }
 
+  /**
+   * Set the scores achieved
+   */
   public void setScore(int score) {
     this.score = score;
     scoreDisplay.setText("Score: " + score);
@@ -114,6 +129,9 @@ public class StatusDisplay extends UIComponent {
     powerUpIndicator.setImage(image);
   }
 
+  /**
+   * Set the current activated power up
+   */
   public void setPowerUp(PowerUpType powerUp) {
     this.powerUp = powerUp;
     updatePowerUpIcon();

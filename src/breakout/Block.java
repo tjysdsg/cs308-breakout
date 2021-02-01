@@ -7,6 +7,10 @@ import java.util.Map;
 import java.util.Objects;
 
 // TODO: implement explosive and moving block
+
+/**
+ * Represent the bricks
+ */
 public class Block extends GameObject {
 
   public enum BlockType {
@@ -70,6 +74,9 @@ public class Block extends GameObject {
     collider = new BlockCollider(this.p1, this.p2);
   }
 
+  /**
+   * Set the image of the block depending on the block type
+   */
   public void updateBlockImage() {
     Image image = new Image(Objects.requireNonNull(
         this.getClass().getClassLoader().getResourceAsStream(IMAGE.get(type))
@@ -77,6 +84,9 @@ public class Block extends GameObject {
     sceneNode.setImage(image);
   }
 
+  /**
+   * @see GameObject#handleCollision
+   */
   @Override
   public void handleCollision(Collision collision) {
     --health;
@@ -88,10 +98,16 @@ public class Block extends GameObject {
     }
   }
 
+  /**
+   * Get the type of this block
+   */
   public BlockType getBlockType() {
     return type;
   }
 
+  /**
+   * Set the block type and update the display
+   */
   public void setBlockType(BlockType type) {
     this.type = type;
     updateBlockImage();

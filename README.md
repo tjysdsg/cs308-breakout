@@ -29,6 +29,13 @@ Key/Mouse inputs:
 
 Cheat keys:
 
+- "L": add one extra live
+- "R": reset the level
+- "W": instantly win this level
+- "P": make the paddle full width
+- "F": make all fortified block 1 health
+- Number 1 to 3: load level 1, 2 or 3
+
 ### Notes/Assumptions
 
 Assumptions or Simplifications:

@@ -74,66 +74,86 @@ public class Level {
     setupUI();
   }
 
+  private void handleHorizontalInput(double val) {
+    if (!paused) {
+      paddle.translate((int) val);
+    }
+  }
+
+  /**
+   * Press "L" to add one extra life
+   */
+  private void handleLCheatKey(double val) {
+    if (val == 1) {
+      ++lives;
+      statusDisplay.setLives(lives);
+    }
+  }
+
+  /**
+   * Press "R" to reset the level
+   */
+  private void handleRCheatKey(double val) {
+    if (val == 1) {
+      resetLevel();
+    }
+  }
+
+  /**
+   * Press "W" to win this level
+   */
+  private void handleWCheatKey(double val) {
+    if (val == 1) {
+      winGame(true);
+    }
+  }
+
+  /**
+   * Press "P" to make paddle full width
+   */
+  private void handlePCheatKey(double val) {
+    if (val == 1) {
+      paddle.setWidth(Main.SCREEN_WIDTH);
+    }
+  }
+
+  /**
+   * Press "F" to make paddle full width
+   */
+  private void handleFCheatKey(double val) {
+    if (val == 1) {
+      for (Block b : blocks) {
+        if (b.getBlockType() == BlockType.FORTIFIED) {
+          b.health = 1;
+          b.setBlockType(BlockType.NORMAL);
+        }
+      }
+    }
+  }
+
+  /**
+   * Press Space to start/pause
+   */
+  private void handleSpaceKey(double val) {
+    if (val == 1) {
+      if (won) {
+        System.out.println("Loading the next level...");
+        won = false;
+        loadNextLevel();
+      } else {
+        pauseGame(!paused);
+      }
+    }
+  }
+
   private void registerInputHandlers() {
-    inputManager.registerInputHandler("Horizontal", val -> {
-      if (!paused) {
-        paddle.translate((int) val);
-      }
-    });
-
-    // press "L" to add one extra life
-    inputManager.registerInputHandler("L", val -> {
-      if (val == 1) {
-        ++lives;
-        statusDisplay.setLives(lives);
-      }
-    });
-
-    // press "R" to reset the level
-    inputManager.registerInputHandler("R", val -> {
-      if (val == 1) {
-        resetLevel();
-      }
-    });
-
-    // press "W" to win this level
-    inputManager.registerInputHandler("W", val -> {
-      if (val == 1) {
-        winGame(true);
-      }
-    });
-
-    // press "P" to make paddle full width
-    inputManager.registerInputHandler("P", val -> {
-      if (val == 1) {
-        paddle.setWidth(Main.SCREEN_WIDTH);
-      }
-    });
-
-    // press "F" to all fortified blocks 1 health
-    inputManager.registerInputHandler("F", val -> {
-      if (val == 1) {
-        for (Block b : blocks) {
-          if (b.getBlockType() == BlockType.FORTIFIED) {
-            b.health = 1;
-            b.setBlockType(BlockType.NORMAL);
-          }
-        }
-      }
-    });
-
-    // press Space to start/pause
-    inputManager.registerInputHandler("Space", val -> {
-      if (val == 1) {
-        if (won) {
-          System.out.println("Loading the next level...");
-          won = false;
-          loadNextLevel();
-        } else {
-          pauseGame(!paused);
-        }
-      }
-    });
+    inputManager.registerInputHandler("Horizontal", this::handleHorizontalInput);
+    inputManager.registerInputHandler("L", this::handleLCheatKey);
+    inputManager.registerInputHandler("R", this::handleRCheatKey);
+    inputManager.registerInputHandler("W", this::handleWCheatKey);
+    inputManager.registerInputHandler("P", this::handlePCheatKey);
+    inputManager.registerInputHandler("F", this::handleFCheatKey);
+    inputManager.registerInputHandler("Space", this::handleSpaceKey);
 
     // press 1 to 3 to load relevant level
     inputManager.registerInputHandler("1", val -> {

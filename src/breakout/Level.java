@@ -13,16 +13,15 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * Level loading, store states of the current level, interaction between components
+ * - Handles level loading
+ * <p>
+ * - Stores states of the current level
+ * <p>
+ * - Handles interaction between components
+ * <p>
+ * - Checks for win/loss
  */
 public class Level {
-
-  private enum CheatType {
-    TRIGGER_EXPLOSION,
-    WIDE_PADDLE,
-    REMOVE_INDESTRUCTIBLE,
-    ONE_HIT_FORTIFIED,
-  }
 
   private final Scene scene;
   private final Group root;

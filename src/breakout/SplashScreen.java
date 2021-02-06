@@ -7,7 +7,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 /**
- * UI that spans the whole screen and blur out game components for easier reading
+ * Full-screen pause menu used to display game rules or winning text. It blurs out game objects for
+ * easier reading
  */
 public class SplashScreen extends UIComponent {
 

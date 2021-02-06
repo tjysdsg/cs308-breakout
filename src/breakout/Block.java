@@ -9,7 +9,7 @@ import java.util.Objects;
 // TODO: implement explosive and moving block
 
 /**
- * Represent the bricks
+ * Handles collision, destruction, and conversion of a block.
  */
 public class Block extends GameObject {
 

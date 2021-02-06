@@ -3,7 +3,7 @@ package breakout;
 import java.util.HashMap;
 
 /**
- * Base class of all colliders
+ * Base class of all colliders, handles collision detection and normal vector calculation.
  */
 public class Collider {
 

@@ -11,7 +11,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 /**
- * UI responsible for displaying game status
+ * UI component for displaying game status on top the of screen (remaining live, scores, level name,
+ * etc.)
  */
 public class StatusDisplay extends UIComponent {
 

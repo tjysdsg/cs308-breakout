@@ -63,7 +63,7 @@ at the same time.
   manages UI menus.
 - `Ball`: handles movement and collision of the ball.
 - `Block`: handles collision, destruction, and conversion of a block.
-- `Paddle`: handles collision, and movement of the paddle.
+- `Paddle`: handles collision and movement of the paddle.
 - `KeyboardInputManager`: watch input events and dispatch events to input handlers.
 - `Collider` and its subclasses: handles collision detection and normal vector calculation.
 - `GameObject`: parent class of all visible, moving, and collidable objects.

@@ -6,7 +6,7 @@ import javafx.scene.image.ImageView;
 import java.util.Objects;
 
 /**
- * Represents the ball
+ * Handles movement and collision of the ball.
  * <p>
  * NOTE: pos is the center of the ball
  */

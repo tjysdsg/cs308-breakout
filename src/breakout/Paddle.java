@@ -6,7 +6,7 @@ import javafx.scene.image.ImageView;
 import java.util.Objects;
 
 /**
- * Represents the paddle
+ * Handles collision and movement of the paddle.
  */
 public class Paddle extends GameObject {
 
